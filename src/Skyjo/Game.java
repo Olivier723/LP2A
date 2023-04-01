@@ -1,29 +1,28 @@
 package Skyjo;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Game {
+
     private final ArrayList<Player> players;
+
     private final GameWindow window;
-    public Game(){
+
+    public Game() {
         //Create the list of players
         Scanner sc = new Scanner(System.in);
         System.out.println("How many players are there ? (Must be between 2 an 8 included)");
-        int size = getSize(sc);
+        int size = getPlayerAmountFromUser(sc);
         this.players = new ArrayList<>(size);
-
 
         //Create each player's instance
         for(int i = 0; i < size; i++) {
             System.out.printf("Veuillez enter un nom pour le joueur %d: \n", i + 1);
-            String answer = sc.nextLine();
-            while (isNameValid(answer)) {
-                System.out.println("The name you entered is not valid, please enter a valid name !");
-                answer = sc.nextLine();
-            }
-            players.add(new Player(answer));
+            players.add(new Player(getPlayerName(sc)));
         }
 
         this.window = new GameWindow("Test", 640, 480);
@@ -31,19 +30,40 @@ public class Game {
 
     @Override
     public String toString () {
-        String s = "The game has "+ players.size() +" players :\n";
-        for(final var player : players){
-            s += "\t- " + player + "\n";
+        StringBuilder s = new StringBuilder("The game has " + players.size() + " players :\n");
+        for(final var player : players) {
+            s.append("\t- ").append(player).append("\n");
         }
-        return s;
+        return s.toString();
     }
 
-    private boolean isNameValid(String name){
-        return name.matches(".*[^a-zA-Z0-9 ].*");
+    private boolean isNameValid (@NotNull String name) {
+        return name.matches("[^a-zA-Z0-9 ].*");
     }
 
+    private boolean isNameAlreadyUsed(String name) {
+        for(final var player : players){
+            if(player.getName().equals(name))
+                return true;
+        }
+        return false;
+    }
 
-    private int getSize(Scanner sc){
+    private String getPlayerName(Scanner sc) {
+        sc.nextLine();
+        String answer = sc.nextLine();
+        while (isNameValid(answer)) {
+            System.out.println("The name you entered is not valid, please enter a valid name !");
+            answer = sc.nextLine();
+        }
+        while(isNameAlreadyUsed(answer)){
+            System.out.println("The name you entered is already taken, please enter another name !");
+            answer = sc.nextLine();
+        }
+        return answer;
+    }
+
+    private int getPlayerAmountFromUser (Scanner sc){
         int value = 0;
         boolean validInput = false;
 
@@ -61,7 +81,6 @@ public class Game {
                 System.out.println("Invalid input. Please enter an integer value.");
                 sc.nextLine(); // consume the invalid input
             }
-
         }
 
         //Empty the buffer
