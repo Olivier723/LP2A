@@ -5,12 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="113fa787-f6bc-468d-9d39-a2f2a305c185" name="Changes" comment="Yee">
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Skyjo/Card.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Skyjo/GameState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Skyjo/TestWindow.form" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Skyjo/TestWindow.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LP2A Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/LP2A Project.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resumé.odt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Skyjo/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Skyjo/GameWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo/GameWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo/GameWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo/GameFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Skyjo/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo/Player.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -21,6 +24,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -37,25 +41,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Downloaded.Files.Path.Enabled": "false",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/home/olivier/Documents/Code/Java/LP2A Project",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "editor.preferences.fonts.default",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.SHOW&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/olivier/Documents/Code/Java/LP2A Project&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.language&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="Skyjo" />
@@ -75,6 +81,10 @@
       <workItem from="1680341221862" duration="68000" />
       <workItem from="1680341295021" duration="3010000" />
       <workItem from="1680349963956" duration="3227000" />
+      <workItem from="1680603342838" duration="4847000" />
+      <workItem from="1680609877199" duration="140000" />
+      <workItem from="1680711430736" duration="8066000" />
+      <workItem from="1680810098384" duration="263000" />
     </task>
     <task id="LOCAL-00001" summary="Yee">
       <created>1680340374047</created>

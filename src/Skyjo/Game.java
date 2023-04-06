@@ -1,31 +1,27 @@
 package Skyjo;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
-public class Game {
-
+public class Game extends GameFrame{
     private final ArrayList<Player> players;
-
-    private final GameWindow window;
+    private final ArrayList<Card> drawPile;
+    private final ArrayList<Card> discardPile;
+    private GameState state;
 
     public Game() {
-        //Create the list of players
-        Scanner sc = new Scanner(System.in);
-        System.out.println("How many players are there ? (Must be between 2 an 8 included)");
-        int size = getPlayerAmountFromUser(sc);
-        this.players = new ArrayList<>(size);
+        super("Skyjo", 500, 250);
+        this.players = new ArrayList<>();
+        this.state = GameState.INIT;
+        this.drawPile = new ArrayList<>();
+        this.discardPile = new ArrayList<>();
+        super.getTitleLabel().setText("Choose between 2 and 8 player names.");
+        super.getPrompt().setText("Enter a nickname : ");
+        super.getButton().addActionListener(e -> eventHandler());
+        super.getTextField1().addActionListener(e -> eventHandler());
+    }
 
-        //Create each player's instance
-        for(int i = 0; i < size; i++) {
-            System.out.printf("Veuillez enter un nom pour le joueur %d: \n", i + 1);
-            players.add(new Player(getPlayerName(sc)));
-        }
-
-        this.window = new GameWindow("Test", 640, 480);
+    public void start() {
+        super.setVisible(true);
     }
 
     @Override
@@ -37,8 +33,8 @@ public class Game {
         return s.toString();
     }
 
-    private boolean isNameValid (@NotNull String name) {
-        return name.matches("[^a-zA-Z0-9 ].*");
+    private boolean isNameValid (String name) {
+        return name.matches("^[a-zA-Z0-9]+$");
     }
 
     private boolean isNameAlreadyUsed(String name) {
@@ -49,42 +45,26 @@ public class Game {
         return false;
     }
 
-    private String getPlayerName(Scanner sc) {
-        sc.nextLine();
-        String answer = sc.nextLine();
-        while (isNameValid(answer)) {
-            System.out.println("The name you entered is not valid, please enter a valid name !");
-            answer = sc.nextLine();
-        }
-        while(isNameAlreadyUsed(answer)){
-            System.out.println("The name you entered is already taken, please enter another name !");
-            answer = sc.nextLine();
-        }
-        return answer;
-    }
-
-    private int getPlayerAmountFromUser (Scanner sc){
-        int value = 0;
-        boolean validInput = false;
-
-        while (!validInput) {
-            try {
-                value = sc.nextInt();
-                if(value >= 2 && value <= 8) {
-                    validInput = true;
-                }
-                else {
-                    System.out.println("Please enter a number between 2 and 8 !");
+    private void eventHandler () {
+        switch (this.state) {
+            case INIT -> {
+                String name = super.getTextField1().getText();
+                if (isNameValid(name)) {
+                    if (isNameAlreadyUsed(name)) {
+                        super.getPrompt().setText("This name is already used. Please enter another one.");
+                    } else {
+                        if(players.size() >= 8) {
+                            super.getPrompt().setText("Cannot add more players, please start the game.");
+                        } else {
+                            players.add(new Player(name));
+                            super.getPrompt().setText("Please enter the name of the next player.");
+                        }
+                        super.getCurrentPlayers().setText(this.toString());
+                    }
+                } else {
+                    super.getPrompt().setText("Invalid name. Please enter a name without special characters.");
                 }
             }
-            catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter an integer value.");
-                sc.nextLine(); // consume the invalid input
-            }
         }
-
-        //Empty the buffer
-        sc.nextLine();
-        return value;
     }
 }
