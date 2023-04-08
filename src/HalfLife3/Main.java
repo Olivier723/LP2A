@@ -1,4 +1,5 @@
-package Skyjo;
+package HalfLife3;
+
 
 public class Main
 {

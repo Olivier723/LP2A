@@ -1,4 +1,4 @@
-package Skyjo;
+package HalfLife3;
 
 import javax.swing.*;
 

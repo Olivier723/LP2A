@@ -1,11 +1,11 @@
-package Skyjo;
+package HalfLife3.basics;
 
 import java.util.ArrayList;
 
 public class Player {
     private int points;
     private ArrayList<Card> currentHand;
-    public String getName () {
+    public String getName() {
         return name;
     }
 

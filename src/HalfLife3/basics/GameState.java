@@ -1,4 +1,4 @@
-package Skyjo;
+package HalfLife3.basics;
 
 public enum GameState {
     INIT,
