@@ -1,4 +1,4 @@
-package HalfLife3;
+package Skyjo_frenic;
 
 import javax.swing.*;
 

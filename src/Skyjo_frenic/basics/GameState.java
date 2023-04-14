@@ -1,4 +1,4 @@
-package HalfLife3.basics;
+package Skyjo_frenic.basics;
 
 public enum GameState {
     INIT,

@@ -1,10 +1,14 @@
-package HalfLife3.basics;
+package Skyjo_frenic.basics;
 
 import java.util.ArrayList;
 
 public class Player {
-    private int points;
-    private ArrayList<Card> currentHand;
+    private Integer points;
+
+    private static final int MAX_CARDS_PER_HAND = 12;
+
+    private final ArrayList<Card> currentHand;
+
     public String getName() {
         return name;
     }
@@ -13,16 +17,22 @@ public class Player {
     public Player(String name){
         this.name = name;
         this.points = 0;
-        this.currentHand = new ArrayList<>(12);
+        this.currentHand = new ArrayList<>(MAX_CARDS_PER_HAND);
     }
 
+    // Might be useless
     public void revealCard(int x, int y) {
         // TODO
     }
 
-    public boolean areAllCardsReveal() {
-        // TODO
-        return false;
+
+    public boolean areAllCardsRevealed() {
+        for(var card : currentHand) {
+            if (!card.isRevealed()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void addPoints(int points) {

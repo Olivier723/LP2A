@@ -1,4 +1,4 @@
-package HalfLife3.gui;
+package Skyjo_frenic.gui;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,19 +8,19 @@ import java.awt.*;
  *
  *
  */
-public class HF3Panel extends JPanel{
+public class SFCPanel extends JPanel implements EasyBackgroundImage, SFCComponent {
 
     private Image img;
 
-    public HF3Panel (String imgPath) {
+    public SFCPanel (String imgPath) {
         img = new ImageIcon(imgPath).getImage();
     }
 
-    public HF3Panel (Image img) {
+    public SFCPanel (Image img) {
         this.img = img;
     }
 
-    public HF3Panel () {
+    public SFCPanel () {
         this.img = null;
     }
 
@@ -28,9 +28,23 @@ public class HF3Panel extends JPanel{
         img = new ImageIcon(imgPath).getImage();
     }
 
+    public void setBackgroundImage (Image img) {
+        this.img = img;
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+    }
+
+    public void reveal () {
+        this.setEnabled(true);
+        this.setVisible(true);
+    }
+
+    public void disappear () {
+        this.setEnabled(false);
+        this.setVisible(false);
     }
 }

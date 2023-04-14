@@ -1,9 +1,9 @@
-package HalfLife3.gui;
+package Skyjo_frenic.gui;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class HF3Frame extends JFrame {
+public class SFCFrame extends JFrame implements SFCComponent {
 
     ImageIcon background;
 
@@ -17,12 +17,12 @@ public class HF3Frame extends JFrame {
         return prompt;
     }
 
-    public JTextField getTextField1 () {
-        return textField1;
+    public JTextField getNameInput () {
+        return nameInput;
     }
 
-    public JButton getButton () {
-        return button;
+    public SFCButton getOkButton () {
+        return okButton;
     }
 
     public JTextPane getPlayerList () {
@@ -30,11 +30,39 @@ public class HF3Frame extends JFrame {
     }
 
     private JLabel prompt;
-    private JTextField textField1;
-    private JButton button;
-    private JTextPane playerList;
 
-    protected HF3Frame (String title, int w, int h) {
+    private JTextField nameInput;
+
+    private SFCButton okButton;
+
+    private SFCButton cancelButton;
+
+    public SFCButton getCancelButton () {
+        return cancelButton;
+    }
+
+    private SFCButton launchButton;
+
+    public SFCButton getLaunchButton () {
+        return launchButton;
+    }
+    protected JTextPane playerList;
+
+    private GridLayout layout;
+
+    public GridLayout getLayout () {
+        return layout;
+    }
+
+    public void disappear () {
+        this.setVisible(false);
+    }
+
+    public void reveal () {
+        this.setVisible(true);
+    }
+
+    protected SFCFrame (String title, int w, int h) {
         this.setLNF();
         this.setTitle(title);
         this.setSize(w, h);
@@ -45,33 +73,61 @@ public class HF3Frame extends JFrame {
         this.createUIComponents();
     }
 
+    /**
+     * TODO : Change how the game handles the player initiation menu.
+     * Refer to <a href="./gui_proto.png"> this image<//> for more information.
+     */
     private void createUIComponents () {
         var contentPane = this.getContentPane();
-        HF3Panel generalPanel = new HF3Panel(background.getImage());
+        SFCPanel generalPanel = new SFCPanel(background.getImage());
         contentPane.add(generalPanel);
-        GridLayout layout = new GridLayout(4, 1);
+
+        layout = new GridLayout(4, 1);
         layout.setVgap(10);
         layout.setHgap(10);
         generalPanel.setLayout(layout);
+
         generalPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
         titleLabel = new JLabel();
         titleLabel.setFont(new Font("Arial", Font.BOLD , 20));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         generalPanel.add(titleLabel);
-        HF3Panel inputPanel = new HF3Panel(background.getImage());
+
+        SFCPanel inputPanel = new SFCPanel(background.getImage());
+
         inputPanel.setLayout(new GridLayout(1, 2));
-        textField1 = new JTextField(10);
+        generalPanel.add(inputPanel);
+
+        nameInput = new JTextField(10);
+        inputPanel.add(nameInput);
+
         prompt = new JLabel();
         prompt.setBackground(Color.WHITE);
         prompt.setFont(new Font("Arial", Font.BOLD, 14));
         inputPanel.add(prompt);
-        inputPanel.add(textField1);
-        generalPanel.add(inputPanel);
-        button = new JButton("OK");
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setMaximumSize(new Dimension(100, 50));
-        button.setAlignmentY(Component.CENTER_ALIGNMENT);
-        generalPanel.add(button);
+
+        SFCPanel buttonPanel = new SFCPanel(background.getImage());
+        generalPanel.add(buttonPanel);
+
+        GridLayout buttonLayout = new GridLayout(1, 2);
+        buttonLayout.setHgap(10);
+        buttonPanel.setLayout(buttonLayout);
+
+        okButton = new SFCButton("OK");
+        okButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        okButton.setMaximumSize(new Dimension(100, 50));
+        okButton.setAlignmentY(Component.CENTER_ALIGNMENT);
+        buttonPanel.add(okButton);
+
+        cancelButton = new SFCButton("Cancel");
+        cancelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        cancelButton.setMaximumSize(new Dimension(100, 50));
+        cancelButton.setAlignmentY(Component.CENTER_ALIGNMENT);
+        buttonPanel.add(cancelButton);
+
+        launchButton = new SFCButton("Start Game");
+
         playerList = new JTextPane();
         playerList.setFont(new Font("Arial", Font.PLAIN, 14));
         playerList.setEditable(false);
