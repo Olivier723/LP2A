@@ -23,7 +23,7 @@ public class Card extends SFCButton {
 
     private cardState state = cardState.HIDDEN;
 
-    public void reveal() {
+    public void reveal () {
         this.state = cardState.REVEALED;
     }
 
@@ -43,8 +43,14 @@ public class Card extends SFCButton {
 
     // Faut le mettre ici ? ou dans le game ? TODO : a voir
     public void onClick(Integer points) {
-        points++;
+        if(!isRevealed()) {
+            reveal();
+            points += this.value;
+            // If moved to player, change the way to increase the score
+            return;
+        }
     }
+
 
     @Override
     public String toString () {

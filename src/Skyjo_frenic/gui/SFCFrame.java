@@ -54,11 +54,13 @@ public class SFCFrame extends JFrame implements SFCComponent {
         return layout;
     }
 
-    public void disappear () {
+    @Override
+    public void hide () {
         this.setVisible(false);
     }
 
-    public void reveal () {
+    @Override
+    public void show () {
         this.setVisible(true);
     }
 

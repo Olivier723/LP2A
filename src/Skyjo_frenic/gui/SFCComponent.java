@@ -5,10 +5,7 @@ package Skyjo_frenic.gui;
  * Might not be useful...
  */
 public interface SFCComponent {
-    void disappear ();
+    void hide ();
 
-    /**
-     * Using reveal instead of show because show is already a method in the JComponent class
-     */
-    void reveal();
+    void show ();
 }

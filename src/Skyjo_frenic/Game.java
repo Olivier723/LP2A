@@ -28,9 +28,9 @@ public class Game extends SFCFrame {
         this.discardPile = new ArrayDeque<>(MAX_CARD_AMOUNT);
         super.getTitleLabel().setText("Choose between 2 and 8 player names.");
         super.getPrompt().setText("Enter a nickname : ");
-        super.getOkButton().addActionListener(e -> eventHandler());
-        super.getCancelButton().addActionListener(e -> removePlayer());
-        super.getNameInput().addActionListener(e -> eventHandler());
+        super.getOkButton().addActionListener(e -> nameInputHandler());
+        super.getCancelButton().addActionListener(e -> removePlayerHandler());
+        super.getNameInput().addActionListener(e -> nameInputHandler());
         this.turn = 0;
     }
 
@@ -40,6 +40,10 @@ public class Game extends SFCFrame {
 
     @Override
     public String toString () {
+        /*
+        * I don't know why my IDE told me to use StringBuilder,
+        * my google research told me it's better in string concatenation.
+        */
         if(!players.isEmpty()) {
             StringBuilder s = new StringBuilder("The game has " + players.size() + " players :\n");
             for (final var player : players) {
@@ -99,7 +103,7 @@ public class Game extends SFCFrame {
     /**
      * Removes the last player added in the players list when someone clicks the "Cancel button"
      */
-    private void removePlayer () {
+    private void removePlayerHandler () {
         if(!players.isEmpty()){
             this.players.removeLast();
             updatePlayerList();
@@ -112,7 +116,7 @@ public class Game extends SFCFrame {
      * and then if there are less than 8 players
      * TODO : Rename method
      */
-    private void eventHandler () {
+    private void nameInputHandler () {
         String name = super.getNameInput().getText();
         super.getNameInput().setText("");
         if (!isNameValid(name)) {

@@ -25,6 +25,17 @@ public class Player {
         // TODO
     }
 
+    public void displayCurrentHand () {
+        for(var card : currentHand) {
+            card.show();
+        }
+    }
+
+    public void hideCurrentHand () {
+        for(var card : currentHand) {
+            card.hide();
+        }
+    }
 
     public boolean areAllCardsRevealed() {
         for(var card : currentHand) {

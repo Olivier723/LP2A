@@ -4,25 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="113fa787-f6bc-468d-9d39-a2f2a305c185" name="Changes" comment="Created some classes to simplify background images">
-      <change afterPath="$PROJECT_DIR$/gui_proto.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Skyjo_frenic/Rules.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/EasyBackgroundImage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCButton.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_4_23,_8_08_AM_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_4_23__8_08_AM__Changes_.xml" beforeDir="false" />
+    <list default="true" id="113fa787-f6bc-468d-9d39-a2f2a305c185" name="Changes" comment="Added some interfaces to make the structuration of code easier and refactored some code as well">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HalfLife3/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HalfLife3/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HalfLife3/TestWindow.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/TestWindow.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HalfLife3/TestWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/TestWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HalfLife3/basics/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Card.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HalfLife3/basics/GameState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/basics/GameState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HalfLife3/basics/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HalfLife3/gui/HF3Frame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HalfLife3/gui/HF3Panel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Card.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCButton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCPanel.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +88,7 @@
       <workItem from="1680866411101" duration="847000" />
       <workItem from="1680867280856" duration="7663000" />
       <workItem from="1680942156694" duration="752000" />
-      <workItem from="1681476431232" duration="11365000" />
+      <workItem from="1681476431232" duration="13796000" />
     </task>
     <task id="LOCAL-00001" summary="Yee">
       <created>1680340374047</created>
@@ -121,7 +111,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680942200607</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Added some interfaces to make the structuration of code easier and refactored some code as well">
+      <created>1681491171693</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1681491171693</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -142,7 +139,8 @@
     <MESSAGE value="Yee" />
     <MESSAGE value="Tried to add a window builder from IntelliJ (unsuccessful)" />
     <MESSAGE value="Created some classes to simplify background images" />
-    <option name="LAST_COMMIT_MESSAGE" value="Created some classes to simplify background images" />
+    <MESSAGE value="Added some interfaces to make the structuration of code easier and refactored some code as well" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added some interfaces to make the structuration of code easier and refactored some code as well" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
