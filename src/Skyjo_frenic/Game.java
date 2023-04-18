@@ -34,15 +34,15 @@ public class Game extends SFCFrame {
         this.turn = 0;
     }
 
-    public void start() {
+    public void begin() {
         super.setVisible(true);
     }
 
     @Override
-    public String toString () {
+    public String toString() {
         /*
         * I don't know why my IDE told me to use StringBuilder,
-        * my google research told me it's better in string concatenation.
+        * my google research told me it's better in string concatenation, but it seems more verbose.
         */
         if(!players.isEmpty()) {
             StringBuilder s = new StringBuilder("The game has " + players.size() + " players :\n");
@@ -69,7 +69,7 @@ public class Game extends SFCFrame {
      * @param name The name that the player gave
      * @return True if the name given is already in use, false otherwise
      */
-    private boolean isNameAlreadyUsed(String name) {
+    private boolean isNameAlreadyUsed (String name) {
         for(final var player : players){
             if(player.getName().equals(name))
                 return true;
@@ -78,11 +78,10 @@ public class Game extends SFCFrame {
     }
 
     /**
-     *
      * @return The complete deck with every card generated randomly
-     * TODO: Change the generation method using an external file
+     * TODO: Change the generation method using an external file (maybe)
      */
-    private ArrayDeque<Card> generateDeck(){
+    private ArrayDeque<Card> generateDeck() {
         ArrayDeque<Card> deck = new ArrayDeque<>(MAX_CARD_AMOUNT);
         for (int i = 0; i < MAX_CARD_AMOUNT; ++i) {
             deck.add(new Card((int) (Math.random() * MAX_CARD_AMOUNT),
@@ -97,7 +96,28 @@ public class Game extends SFCFrame {
      */
     private void gameStart() {
         this.state = GameState.PLAYING;
-        // TODO : distribute cards
+        //Distributing starting cards
+        for(final var player : players) {
+            for(int i = 0; i < Player.MAX_CARDS_PER_HAND; ++i) {
+                player.addCardToHand(drawPile.removeLast());
+            }
+        }
+        this.play();
+    }
+
+    /**
+     * Since the game is event driven, we don't really need a play function.
+     * So the goal of this function is to set the correct handlers on the cards
+     */
+    private void play(){
+
+    }
+
+    /**
+     * Exit the game by closing the associated window
+     */
+    public void quit() {
+        this.dispose();
     }
 
     /**
@@ -109,6 +129,8 @@ public class Game extends SFCFrame {
             updatePlayerList();
         }
     }
+
+
 
     /**
      * The event handler for the game startup so that when you click the "OK" button,

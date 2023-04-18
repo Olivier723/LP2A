@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Player {
     private Integer points;
 
-    private static final int MAX_CARDS_PER_HAND = 12;
+    public static final int MAX_CARDS_PER_HAND = 12;
 
     private final ArrayList<Card> currentHand;
 
@@ -44,6 +44,10 @@ public class Player {
             }
         }
         return true;
+    }
+
+    public void addCardToHand(Card card) {
+        this.currentHand.add(card);
     }
 
     public void addPoints(int points) {

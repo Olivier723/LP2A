@@ -50,19 +50,15 @@ public class SFCFrame extends JFrame implements SFCComponent {
 
     private GridLayout layout;
 
-    public GridLayout getLayout () {
-        return layout;
-    }
-
-    @Override
+/*
     public void hide () {
         this.setVisible(false);
     }
 
-    @Override
+
     public void show () {
         this.setVisible(true);
-    }
+    }*/
 
     protected SFCFrame (String title, int w, int h) {
         this.setLNF();

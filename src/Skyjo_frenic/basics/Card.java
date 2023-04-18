@@ -42,6 +42,7 @@ public class Card extends SFCButton {
     }
 
     // Faut le mettre ici ? ou dans le game ? TODO : a voir
+    // Peut être asssocier un joueur a la carte
     public void onClick(Integer points) {
         if(!isRevealed()) {
             reveal();
