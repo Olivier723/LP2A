@@ -4,10 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="113fa787-f6bc-468d-9d39-a2f2a305c185" name="Changes" comment="Added some interfaces to make the structuration of code easier and refactored some code as well">
+    <list default="true" id="113fa787-f6bc-468d-9d39-a2f2a305c185" name="Changes" comment="hsighis">
+      <change afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/CardButton.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/Textures.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui_proto.png" beforeDir="false" afterPath="$PROJECT_DIR$/gui_proto.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/TestWindow.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/TestWindow.form" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/TestWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/TestWindow.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Card.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Player.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCFrame.java" afterDir="false" />
@@ -20,9 +25,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -87,6 +92,9 @@
       <workItem from="1680867280856" duration="7663000" />
       <workItem from="1680942156694" duration="752000" />
       <workItem from="1681476431232" duration="13796000" />
+      <workItem from="1681829978242" duration="4961000" />
+      <workItem from="1681903521493" duration="3737000" />
+      <workItem from="1681984827242" duration="7166000" />
     </task>
     <task id="LOCAL-00001" summary="Yee">
       <created>1680340374047</created>
@@ -116,7 +124,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681491171693</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="hsighis">
+      <created>1681829995033</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1681829995034</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -138,7 +153,8 @@
     <MESSAGE value="Tried to add a window builder from IntelliJ (unsuccessful)" />
     <MESSAGE value="Created some classes to simplify background images" />
     <MESSAGE value="Added some interfaces to make the structuration of code easier and refactored some code as well" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added some interfaces to make the structuration of code easier and refactored some code as well" />
+    <MESSAGE value="hsighis" />
+    <option name="LAST_COMMIT_MESSAGE" value="hsighis" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

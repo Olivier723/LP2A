@@ -1,7 +1,9 @@
 package Skyjo_frenic.basics;
 
 import Skyjo_frenic.gui.SFCButton;
+import Skyjo_frenic.gui.Textures;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -9,11 +11,31 @@ import java.awt.*;
  * However it makes it kinda annoying to make compatible w/ the CLI
  * since the button part is not really useful for the CLI
  */
-public class Card extends SFCButton {
+public class Card{
     private final int value;
 
     public int getValue() {
         return value;
+    }
+
+    private Player associatedPlayer;
+
+    private Textures texture;
+
+    public Image getTexture() {
+        return texture.getTexture();
+    }
+
+    public void setTexture(Textures texture) {
+        this.texture = texture;
+    }
+
+    public Player getAssociatedPlayer () {
+        return associatedPlayer;
+    }
+
+    public void setAssociatedPlayer (Player associatedPlayer) {
+        this.associatedPlayer = associatedPlayer;
     }
 
     private enum cardState {
@@ -21,8 +43,11 @@ public class Card extends SFCButton {
         HIDDEN,
     }
 
+
+
     private cardState state = cardState.HIDDEN;
 
+    //TODO : Make it so that when the card is revealed, it's texture changes automatically
     public void reveal () {
         this.state = cardState.REVEALED;
     }
@@ -31,27 +56,29 @@ public class Card extends SFCButton {
         return state == cardState.REVEALED;
     }
 
-    public Card (int value, Image img){
-        this.value = value;
-        super.setBackgroundImage(img);
+    public boolean hasAssociatedPlayer() {
+        return this.associatedPlayer != null;
     }
 
-    public Card (int value, String imgPath){
+    public Card (int value, Textures texture, Player associatedPlayer){
         this.value = value;
-        super.setBackgroundImage(imgPath);
+        this.texture = texture;
+        this.associatedPlayer = associatedPlayer;
     }
 
-    // Faut le mettre ici ? ou dans le game ? TODO : a voir
-    // Peut être asssocier un joueur a la carte
-    public void onClick(Integer points) {
-        if(!isRevealed()) {
+
+    /**
+     * Handles the click on a card :
+     *  - Adds the value of the card to the player's count if the card is being revealed
+     *  -
+     */
+    public void onClick() {
+        if(!isRevealed() && hasAssociatedPlayer()) {
             reveal();
-            points += this.value;
-            // If moved to player, change the way to increase the score
+            associatedPlayer.addPoints(this.value);
             return;
         }
     }
-
 
     @Override
     public String toString () {

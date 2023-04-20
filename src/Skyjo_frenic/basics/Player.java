@@ -3,7 +3,20 @@ package Skyjo_frenic.basics;
 import java.util.ArrayList;
 
 public class Player {
-    private Integer points;
+
+    private int points;
+
+    public int getPoints () {
+        return points;
+    }
+
+    public void setPoints (int points) {
+        this.points = points;
+    }
+
+    public void addPoints(int points) {
+        this.points += points;
+    }
 
     public static final int MAX_CARDS_PER_HAND = 12;
 
@@ -25,7 +38,7 @@ public class Player {
         // TODO
     }
 
-    public void displayCurrentHand () {
+    /*public void displayCurrentHand () {
         for(var card : currentHand) {
             card.show();
         }
@@ -35,7 +48,7 @@ public class Player {
         for(var card : currentHand) {
             card.hide();
         }
-    }
+    }*/
 
     public boolean areAllCardsRevealed() {
         for(var card : currentHand) {
@@ -50,9 +63,7 @@ public class Player {
         this.currentHand.add(card);
     }
 
-    public void addPoints(int points) {
-        this.points += points;
-    }
+
 
     @Override
     public String toString () {

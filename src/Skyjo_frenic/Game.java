@@ -4,7 +4,10 @@ import Skyjo_frenic.gui.SFCFrame;
 import Skyjo_frenic.basics.Card;
 import Skyjo_frenic.basics.GameState;
 import Skyjo_frenic.basics.Player;
+import Skyjo_frenic.gui.Textures;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayDeque;
 
 /**
@@ -24,6 +27,8 @@ public class Game extends SFCFrame {
         this.players = new ArrayDeque<>();
         this.state = GameState.INIT;
         this.drawPile = generateDeck();
+        ImageIcon icon = new ImageIcon("ressources/textures/guig.png");
+        super.setIconImage(icon.getImage());
         System.out.println("Drawpile : " +drawPile); // TODO : remove
         this.discardPile = new ArrayDeque<>(MAX_CARD_AMOUNT);
         super.getTitleLabel().setText("Choose between 2 and 8 player names.");
@@ -51,7 +56,7 @@ public class Game extends SFCFrame {
             }
             return s.toString();
         }
-        return "There is currently no players in the game !";
+        return "There currently is no players in the game !";
     }
 
     /**
@@ -85,7 +90,7 @@ public class Game extends SFCFrame {
         ArrayDeque<Card> deck = new ArrayDeque<>(MAX_CARD_AMOUNT);
         for (int i = 0; i < MAX_CARD_AMOUNT; ++i) {
             deck.add(new Card((int) (Math.random() * MAX_CARD_AMOUNT),
-                                  "./ressources/textures/guig.png"));
+                              Textures.CARD_BACK, null));
         }
         return deck;
     }
@@ -93,13 +98,16 @@ public class Game extends SFCFrame {
     /**
      * Event handler for the "Start game" button
      * Sets the game's state to PLAYING to ensure that everything is going smoothly
+     * Distributes the starting cards
      */
     private void gameStart() {
         this.state = GameState.PLAYING;
         //Distributing starting cards
         for(final var player : players) {
             for(int i = 0; i < Player.MAX_CARDS_PER_HAND; ++i) {
-                player.addCardToHand(drawPile.removeLast());
+                var card = drawPile.removeLast();
+                card.setAssociatedPlayer(player);
+                player.addCardToHand(card);
             }
         }
         this.play();
@@ -159,11 +167,10 @@ public class Game extends SFCFrame {
 
             //Try to make it so that when the game can start, the "start game" button pops up
             //I don't know how though :'(
-            /*if (players.size() >= 2) {
+            if (players.size() >= 2) {
                 super.getLaunchButton().addActionListener(e -> gameStart());
-                super.getLayout().setRows(5);
                 super.getContentPane().add(super.getLaunchButton());
-            }*/
+            }
 
             return;
         }
@@ -174,5 +181,12 @@ public class Game extends SFCFrame {
 
     private void updatePlayerList () {
         playerList.setText(this.toString());
+    }
+
+    private Card drawCard() {
+        if(drawPile.isEmpty()) {
+            //TODO : shuffle the discard pile into the draw pile
+        }
+        return drawPile.removeLast();
     }
 }

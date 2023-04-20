@@ -4,12 +4,22 @@ import javax.swing.*;
 
 public class TestWindow {
     private JPanel panel1;
-    private JTextField userInput;
+    private JTextField textField1;
     private JButton okButton;
     private JButton cancelButton;
-    private JList playerList;
-    private JLabel prompt;
-    private JLabel title;
-    private JLabel listTitle;
+    private JPanel mainPanel;
+    private JPanel infoPanel;
+    private JTable table1;
 
+    public TestWindow () {
+        JFrame frame = new JFrame("TestWindow");
+        frame.setContentPane(panel1);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    private void createUIComponents () {
+        // TODO: place custom component creation code here
+    }
 }

@@ -5,35 +5,34 @@ import java.awt.*;
 
 public class SFCFrame extends JFrame implements SFCComponent {
 
-    ImageIcon background;
+    // Get the user's screen size to make the UI reactive (hopefully)
+    Dimension screenSize;
+
+    Image background;
+
+    private JLabel titleLabel;
 
     public JLabel getTitleLabel () {
         return titleLabel;
     }
 
-    private JLabel titleLabel;
+    private JLabel prompt;
 
     public JLabel getPrompt () {
         return prompt;
     }
 
+    private JTextField nameInput;
+
     public JTextField getNameInput () {
         return nameInput;
     }
 
+    private SFCButton okButton;
+
     public SFCButton getOkButton () {
         return okButton;
     }
-
-    public JTextPane getPlayerList () {
-        return playerList;
-    }
-
-    private JLabel prompt;
-
-    private JTextField nameInput;
-
-    private SFCButton okButton;
 
     private SFCButton cancelButton;
 
@@ -46,11 +45,14 @@ public class SFCFrame extends JFrame implements SFCComponent {
     public SFCButton getLaunchButton () {
         return launchButton;
     }
+
     protected JTextPane playerList;
 
-    private GridLayout layout;
+    public JTextPane getPlayerList () {
+        return playerList;
+    }
 
-/*
+    /*
     public void hide () {
         this.setVisible(false);
     }
@@ -61,52 +63,56 @@ public class SFCFrame extends JFrame implements SFCComponent {
     }*/
 
     protected SFCFrame (String title, int w, int h) {
+        this.screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLNF();
         this.setTitle(title);
         this.setSize(w, h);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        this.setLocation((1920-this.getWidth())/2, (1080-this.getHeight())/2);
+        int x = (int) ((screenSize.getWidth() - w) / 2);
+        int y = (int) ((screenSize.getHeight() - h) / 2);
+        this.setLocation(x, y);
         /*this.setResizable(false);*/
-        this.background = new ImageIcon("./ressources/textures/guig.png");
+        this.background = Textures.MAT_TEXTURE.getTexture();
         this.createUIComponents();
     }
 
     /**
      * TODO : Change how the game handles the player initiation menu.
-     * Refer to <a href="./gui_proto.png"> this image<//> for more information.
+     * Refer to gui_proto.png for more information.
      */
     private void createUIComponents () {
         var contentPane = this.getContentPane();
-        SFCPanel generalPanel = new SFCPanel(background.getImage());
-        contentPane.add(generalPanel);
+        SFCPanel mainPanel = new SFCPanel(background);
+        contentPane.add(mainPanel);
 
-        layout = new GridLayout(4, 1);
-        layout.setVgap(10);
-        layout.setHgap(10);
-        generalPanel.setLayout(layout);
+        GridLayout mainLayout = new GridLayout(4, 1);
+        mainLayout.setVgap(10);
+        mainLayout.setHgap(10);
+        mainPanel.setLayout(mainLayout);
 
-        generalPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         titleLabel = new JLabel();
         titleLabel.setFont(new Font("Arial", Font.BOLD , 20));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        generalPanel.add(titleLabel);
+        mainPanel.add(titleLabel);
 
-        SFCPanel inputPanel = new SFCPanel(background.getImage());
+        SFCPanel inputPanel = new SFCPanel(background);
 
         inputPanel.setLayout(new GridLayout(1, 2));
-        generalPanel.add(inputPanel);
-
-        nameInput = new JTextField(10);
-        inputPanel.add(nameInput);
+        mainPanel.add(inputPanel);
 
         prompt = new JLabel();
         prompt.setBackground(Color.WHITE);
         prompt.setFont(new Font("Arial", Font.BOLD, 14));
         inputPanel.add(prompt);
 
-        SFCPanel buttonPanel = new SFCPanel(background.getImage());
-        generalPanel.add(buttonPanel);
+        nameInput = new JTextField(10);
+        nameInput.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        inputPanel.add(nameInput);
+
+        SFCPanel buttonPanel = new SFCPanel(background);
+        mainPanel.add(buttonPanel);
 
         GridLayout buttonLayout = new GridLayout(1, 2);
         buttonLayout.setHgap(10);
@@ -125,11 +131,16 @@ public class SFCFrame extends JFrame implements SFCComponent {
         buttonPanel.add(cancelButton);
 
         launchButton = new SFCButton("Start Game");
+        launchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        launchButton.setMaximumSize(new Dimension(100, 50));
+        launchButton.setAlignmentY(Component.CENTER_ALIGNMENT);
 
         playerList = new JTextPane();
         playerList.setFont(new Font("Arial", Font.PLAIN, 14));
         playerList.setEditable(false);
-        generalPanel.add(playerList);
+        mainPanel.add(playerList);
+
+        this.setMenuBar(createMenuBar());
     }
 
     private void setLNF() {
@@ -146,5 +157,15 @@ public class SFCFrame extends JFrame implements SFCComponent {
             e.printStackTrace();
             System.err.println("Unsupported Look and Feel");
         }
+    }
+
+    private MenuBar createMenuBar() {
+        MenuBar menuBar = new MenuBar();
+        Menu menu = new Menu("Menu");
+        MenuItem menuItem = new MenuItem("Exit");
+        menuItem.addActionListener(e -> this.dispose());
+        menu.add(menuItem);
+        menuBar.add(menu);
+        return menuBar;
     }
 }
