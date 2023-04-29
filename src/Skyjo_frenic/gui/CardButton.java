@@ -14,10 +14,9 @@ public class CardButton extends SFCButton{
         this.associatedCard = associatedCard;
     }
 
-    public CardButton (Card associatedCard){
-        super(associatedCard.toString());
-        this.associatedCard = associatedCard;
-        this.setBackgroundImage(associatedCard.getTexture());
-        this.addActionListener(e -> associatedCard.onClick());
+    public CardButton (Card card){
+        super(card.toString(), card.getTexture().getImage());
+        this.associatedCard = card;
+        this.addActionListener(e -> this.associatedCard.onClick());
     }
 }

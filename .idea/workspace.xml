@@ -5,17 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="113fa787-f6bc-468d-9d39-a2f2a305c185" name="Changes" comment="hsighis">
-      <change afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/CardButton.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/Textures.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui_proto.png" beforeDir="false" afterPath="$PROJECT_DIR$/gui_proto.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/TestWindow.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/TestWindow.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/TestWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/TestWindow.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Card.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/CardButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/CardButton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/EasyBackgroundImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/EasyBackgroundImage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCButton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCComponent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/Textures.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/Texture.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,6 +94,8 @@
       <workItem from="1681829978242" duration="4961000" />
       <workItem from="1681903521493" duration="3737000" />
       <workItem from="1681984827242" duration="7166000" />
+      <workItem from="1682419747451" duration="3754000" />
+      <workItem from="1682689540069" duration="3507000" />
     </task>
     <task id="LOCAL-00001" summary="Yee">
       <created>1680340374047</created>

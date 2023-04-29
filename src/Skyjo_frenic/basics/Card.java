@@ -1,16 +1,10 @@
 package Skyjo_frenic.basics;
 
-import Skyjo_frenic.gui.SFCButton;
-import Skyjo_frenic.gui.Textures;
+import Skyjo_frenic.gui.Texture;
 
-import javax.swing.*;
 import java.awt.*;
 
-/**
- * Extends SFCButton so that it's easier to implement for the GUI,
- * However it makes it kinda annoying to make compatible w/ the CLI
- * since the button part is not really useful for the CLI
- */
+
 public class Card{
     private final int value;
 
@@ -20,47 +14,45 @@ public class Card{
 
     private Player associatedPlayer;
 
-    private Textures texture;
-
-    public Image getTexture() {
-        return texture.getTexture();
-    }
-
-    public void setTexture(Textures texture) {
-        this.texture = texture;
+    public void setAssociatedPlayer (Player associatedPlayer) {
+        this.associatedPlayer = associatedPlayer;
     }
 
     public Player getAssociatedPlayer () {
         return associatedPlayer;
     }
 
-    public void setAssociatedPlayer (Player associatedPlayer) {
-        this.associatedPlayer = associatedPlayer;
+    private Texture texture;
+
+    public Texture getTexture() {
+        return texture;
     }
 
-    private enum cardState {
+    public void setTexture (Texture texture) {
+        this.texture = texture;
+    }
+
+    private enum CardState {
         REVEALED,
-        HIDDEN,
+        HIDDEN;
     }
 
-
-
-    private cardState state = cardState.HIDDEN;
+    private CardState state = CardState.HIDDEN;
 
     //TODO : Make it so that when the card is revealed, it's texture changes automatically
     public void reveal () {
-        this.state = cardState.REVEALED;
+        this.state = CardState.REVEALED;
     }
 
     public boolean isRevealed() {
-        return state == cardState.REVEALED;
+        return state == CardState.REVEALED;
     }
 
     public boolean hasAssociatedPlayer() {
         return this.associatedPlayer != null;
     }
 
-    public Card (int value, Textures texture, Player associatedPlayer){
+    public Card (int value, Texture texture, Player associatedPlayer){
         this.value = value;
         this.texture = texture;
         this.associatedPlayer = associatedPlayer;

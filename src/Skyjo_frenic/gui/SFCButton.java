@@ -40,13 +40,13 @@ public class SFCButton extends JButton implements EasyBackgroundImage, SFCCompon
     }
 
     @Override
-    public void show () {
+    public void SFCShow () {
         this.setEnabled(true);
         this.setVisible(true);
     }
 
     @Override
-    public void hide () {
+    public void SFCHide () {
         this.setEnabled(false);
         this.setVisible(false);
     }

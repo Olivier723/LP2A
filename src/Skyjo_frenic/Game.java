@@ -4,10 +4,9 @@ import Skyjo_frenic.gui.SFCFrame;
 import Skyjo_frenic.basics.Card;
 import Skyjo_frenic.basics.GameState;
 import Skyjo_frenic.basics.Player;
-import Skyjo_frenic.gui.Textures;
+import Skyjo_frenic.gui.Texture;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayDeque;
 
 /**
@@ -23,13 +22,11 @@ public class Game extends SFCFrame {
     private GameState state;
 
     public Game() {
-        super("Skyjo_frenic", 500, 250);
+        super("Skyjo_frenic", 1920, 1080);
         this.players = new ArrayDeque<>();
         this.state = GameState.INIT;
         this.drawPile = generateDeck();
-        ImageIcon icon = new ImageIcon("ressources/textures/guig.png");
-        super.setIconImage(icon.getImage());
-        System.out.println("Drawpile : " +drawPile); // TODO : remove
+        super.setIconImage(Texture.MAT_TEXTURE.getImage());
         this.discardPile = new ArrayDeque<>(MAX_CARD_AMOUNT);
         super.getTitleLabel().setText("Choose between 2 and 8 player names.");
         super.getPrompt().setText("Enter a nickname : ");
@@ -40,7 +37,7 @@ public class Game extends SFCFrame {
     }
 
     public void begin() {
-        super.setVisible(true);
+        super.SFCShow();
     }
 
     @Override
@@ -66,7 +63,7 @@ public class Game extends SFCFrame {
      * @return True if the name is valid given the above rules, false otherwise
      */
     private boolean isNameValid (String name) {
-        return name.matches("^[a-zA-Z0-9]+$");
+        return name != null && name.matches("^[a-zA-Z0-9]+$");
     }
 
     /**
@@ -90,7 +87,7 @@ public class Game extends SFCFrame {
         ArrayDeque<Card> deck = new ArrayDeque<>(MAX_CARD_AMOUNT);
         for (int i = 0; i < MAX_CARD_AMOUNT; ++i) {
             deck.add(new Card((int) (Math.random() * MAX_CARD_AMOUNT),
-                              Textures.CARD_BACK, null));
+                     Texture.CARD_BACK, null));
         }
         return deck;
     }
@@ -100,12 +97,12 @@ public class Game extends SFCFrame {
      * Sets the game's state to PLAYING to ensure that everything is going smoothly
      * Distributes the starting cards
      */
-    private void gameStart() {
+    private void gameStartHandler () {
         this.state = GameState.PLAYING;
         //Distributing starting cards
         for(final var player : players) {
             for(int i = 0; i < Player.MAX_CARDS_PER_HAND; ++i) {
-                var card = drawPile.removeLast();
+                Card card = drawPile.removeLast();
                 card.setAssociatedPlayer(player);
                 player.addCardToHand(card);
             }
@@ -148,7 +145,6 @@ public class Game extends SFCFrame {
      */
     private void nameInputHandler () {
         String name = super.getNameInput().getText();
-        super.getNameInput().setText("");
         if (!isNameValid(name)) {
             /*super.getPrompt().setFont(new Font("Arial", Font.BOLD, 14));*/
             super.getPrompt().setText("Invalid name. Please enter a name without special characters.");
@@ -161,6 +157,7 @@ public class Game extends SFCFrame {
         }
 
         if (players.size() < 8) {
+            super.getNameInput().setText("");
             players.add(new Player(name));
             updatePlayerList();
             super.getPrompt().setText("Please enter the next name :");
@@ -168,8 +165,7 @@ public class Game extends SFCFrame {
             //Try to make it so that when the game can start, the "start game" button pops up
             //I don't know how though :'(
             if (players.size() >= 2) {
-                super.getLaunchButton().addActionListener(e -> gameStart());
-                super.getContentPane().add(super.getLaunchButton());
+                super.getLaunchButton().addActionListener(e -> gameStartHandler());
             }
 
             return;

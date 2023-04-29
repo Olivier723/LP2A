@@ -38,12 +38,12 @@ public class SFCPanel extends JPanel implements EasyBackgroundImage, SFCComponen
         g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
     }
 
-    public void show () {
+    public void SFCShow () {
         this.setEnabled(true);
         this.setVisible(true);
     }
 
-    public void hide () {
+    public void SFCHide () {
         this.setEnabled(false);
         this.setVisible(false);
     }

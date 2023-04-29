@@ -5,7 +5,7 @@ package Skyjo_frenic.gui;
  * Might not be useful...
  */
 public interface SFCComponent {
-    void hide ();
+    void SFCHide ();
 
-    void show ();
+    void SFCShow ();
 }

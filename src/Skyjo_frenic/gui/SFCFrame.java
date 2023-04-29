@@ -7,8 +7,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
 
     // Get the user's screen size to make the UI reactive (hopefully)
     Dimension screenSize;
-
-    Image background;
+    Texture background;
 
     private JLabel titleLabel;
 
@@ -52,15 +51,15 @@ public class SFCFrame extends JFrame implements SFCComponent {
         return playerList;
     }
 
-    /*
-    public void hide () {
+    @Override
+    public void SFCHide () {
         this.setVisible(false);
     }
 
-
-    public void show () {
+    @Override
+    public void SFCShow () {
         this.setVisible(true);
-    }*/
+    }
 
     protected SFCFrame (String title, int w, int h) {
         this.screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -72,7 +71,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
         int y = (int) ((screenSize.getHeight() - h) / 2);
         this.setLocation(x, y);
         /*this.setResizable(false);*/
-        this.background = Textures.MAT_TEXTURE.getTexture();
+        this.background = Texture.MAT_TEXTURE;
         this.createUIComponents();
     }
 
@@ -82,37 +81,44 @@ public class SFCFrame extends JFrame implements SFCComponent {
      */
     private void createUIComponents () {
         var contentPane = this.getContentPane();
-        SFCPanel mainPanel = new SFCPanel(background);
+        SFCPanel mainPanel = new SFCPanel(background.getImage());
         contentPane.add(mainPanel);
 
-        GridLayout mainLayout = new GridLayout(4, 1);
-        mainLayout.setVgap(10);
-        mainLayout.setHgap(10);
-        mainPanel.setLayout(mainLayout);
+        SFCPanel infoPanel = new SFCPanel(Texture.GUIG.getImage());
+        infoPanel.setMaximumSize(new Dimension(500, 500));
+        infoPanel.setPreferredSize(new Dimension(this.getWidth()/2, this.getHeight()/2));
+        infoPanel.setMinimumSize(new Dimension(200, 200));
+        mainPanel.add(infoPanel);
 
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        GridLayout infoLayout = new GridLayout(4, 1);
+        infoLayout.setVgap(10);
+        infoLayout.setHgap(10);
+        infoPanel.setLayout(infoLayout);
+
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         titleLabel = new JLabel();
         titleLabel.setFont(new Font("Arial", Font.BOLD , 20));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        mainPanel.add(titleLabel);
+        infoPanel.add(titleLabel);
 
-        SFCPanel inputPanel = new SFCPanel(background);
+        SFCPanel inputPanel = new SFCPanel(background.getImage());
 
         inputPanel.setLayout(new GridLayout(1, 2));
-        mainPanel.add(inputPanel);
+        inputPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        infoPanel.add(inputPanel);
 
         prompt = new JLabel();
         prompt.setBackground(Color.WHITE);
         prompt.setFont(new Font("Arial", Font.BOLD, 14));
         inputPanel.add(prompt);
 
-        nameInput = new JTextField(10);
+        nameInput = new JTextField();
         nameInput.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         inputPanel.add(nameInput);
 
-        SFCPanel buttonPanel = new SFCPanel(background);
-        mainPanel.add(buttonPanel);
+        SFCPanel buttonPanel = new SFCPanel(background.getImage());
+        infoPanel.add(buttonPanel);
 
         GridLayout buttonLayout = new GridLayout(1, 2);
         buttonLayout.setHgap(10);
@@ -138,7 +144,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
         playerList = new JTextPane();
         playerList.setFont(new Font("Arial", Font.PLAIN, 14));
         playerList.setEditable(false);
-        mainPanel.add(playerList);
+        infoPanel.add(playerList);
 
         this.setMenuBar(createMenuBar());
     }
@@ -147,24 +153,26 @@ public class SFCFrame extends JFrame implements SFCComponent {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }catch (UnsupportedLookAndFeelException e){
+            System.err.println("[WARNING] Defaulting to Cross Platform Look and Feel");
             try {
                 UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             }catch (Exception e1){
                 e1.printStackTrace();
-                System.err.println("Unsupported Look and Feel");
+                System.err.println("[ERROR] Unsupported Look and Feel");
             }
         }catch (Exception e){
             e.printStackTrace();
-            System.err.println("Unsupported Look and Feel");
+            System.err.println("[ERROR] Unsupported Look and Feel");
         }
     }
 
     private MenuBar createMenuBar() {
         MenuBar menuBar = new MenuBar();
+        menuBar.setFont(new Font("Arial", Font.BOLD, 14));
         Menu menu = new Menu("Menu");
-        MenuItem menuItem = new MenuItem("Exit");
-        menuItem.addActionListener(e -> this.dispose());
-        menu.add(menuItem);
+        MenuItem exitItem = new MenuItem("Exit");
+        exitItem.addActionListener(e -> this.dispose());
+        menu.add(exitItem);
         menuBar.add(menu);
         return menuBar;
     }
