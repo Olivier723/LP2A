@@ -6,8 +6,7 @@ import java.awt.*;
 /**
  * TODO : Use the Texture enum to set the background image
  */
-public interface EasyBackgroundImage {
-    void setBackgroundImage(String path);
-    void setBackgroundImage (Image img);
+interface EasyBackgroundImage {
+    void setBackgroundImage (Texture texture);
 
 }

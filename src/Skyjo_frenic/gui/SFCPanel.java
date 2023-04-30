@@ -12,24 +12,12 @@ public class SFCPanel extends JPanel implements EasyBackgroundImage, SFCComponen
 
     private Image img;
 
-    public SFCPanel (String imgPath) {
-        img = new ImageIcon(imgPath).getImage();
+    public SFCPanel (Texture texture) {
+        this.img = texture.getImage();
     }
 
-    public SFCPanel (Image img) {
-        this.img = img;
-    }
-
-    public SFCPanel () {
-        this.img = null;
-    }
-
-    public void setBackgroundImage (String imgPath) {
-        img = new ImageIcon(imgPath).getImage();
-    }
-
-    public void setBackgroundImage (Image img) {
-        this.img = img;
+    public void setBackgroundImage (Texture texture) {
+        this.img = texture.getImage();
     }
 
     @Override

@@ -7,4 +7,6 @@
 - 12 cartes retournées par joueur au depart en 4x3 :  
 ![Exemple of a distribution of cards at the start of the game](Card_distribution.png)  
 
-Each turn a player can choose to dra from the deck or from the discard pile  
+Each turn a player can choose to draw from the deck or from the discard pile  
+
+For now the starting part works, ie the part when the players can start playing

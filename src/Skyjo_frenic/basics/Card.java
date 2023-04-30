@@ -2,9 +2,6 @@ package Skyjo_frenic.basics;
 
 import Skyjo_frenic.gui.Texture;
 
-import java.awt.*;
-
-
 public class Card{
     private final int value;
 
@@ -22,14 +19,11 @@ public class Card{
         return associatedPlayer;
     }
 
-    private Texture texture;
+    private Texture frontTexture;
+    private Texture backTexture;
 
-    public Texture getTexture() {
-        return texture;
-    }
-
-    public void setTexture (Texture texture) {
-        this.texture = texture;
+    public Texture getCurrentTexture() {
+        return isRevealed() ? frontTexture : backTexture;
     }
 
     private enum CardState {
@@ -52,12 +46,21 @@ public class Card{
         return this.associatedPlayer != null;
     }
 
-    public Card (int value, Texture texture, Player associatedPlayer){
+    public Card (int value, Texture backTexture, Texture frontTexture,  Player associatedPlayer){
         this.value = value;
-        this.texture = texture;
+        this.backTexture = backTexture;
+        this.frontTexture = frontTexture;
         this.associatedPlayer = associatedPlayer;
     }
 
+
+    public void flip() {
+        if(isRevealed()) {
+            this.state = CardState.HIDDEN;
+        } else {
+            this.state = CardState.REVEALED;
+        }
+    }
 
     /**
      * Handles the click on a card :

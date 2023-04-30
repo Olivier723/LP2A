@@ -7,30 +7,25 @@ public class SFCButton extends JButton implements EasyBackgroundImage, SFCCompon
     private Image img;
 
     public SFCButton (String text) {
-        super.setText(text);
+        super(text);
+        super.setAlignmentX(Component.CENTER_ALIGNMENT);
+        super.setAlignmentY(Component.CENTER_ALIGNMENT);
         img = null;
     }
 
-    public SFCButton (String text, String imgPath) {
-        super.setText(text);
-        img = new ImageIcon(imgPath).getImage();
-    }
-
-    public SFCButton (String text, Image img) {
-        super.setText(text);
-        this.img = img;
+    public SFCButton (String text, Texture texture) {
+        super(text);
+        super.setAlignmentX(Component.CENTER_ALIGNMENT);
+        super.setAlignmentY(Component.CENTER_ALIGNMENT);
+        this.img = texture.getImage();
     }
 
     public SFCButton () {
         this.img = null;
     }
 
-    public void setBackgroundImage (String imgPath) {
-        img = new ImageIcon(imgPath).getImage();
-    }
-
-    public void setBackgroundImage (Image img) {
-        this.img = img;
+    public void setBackgroundImage (Texture texture) {
+        this.img = texture.getImage();
     }
 
     @Override

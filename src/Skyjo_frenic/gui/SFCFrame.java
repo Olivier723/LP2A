@@ -2,24 +2,30 @@ package Skyjo_frenic.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 public class SFCFrame extends JFrame implements SFCComponent {
 
     // Get the user's screen size to make the UI reactive (hopefully)
-    Dimension screenSize;
-    Texture background;
+    public final Dimension screenSize;
 
-    private JLabel titleLabel;
+    private final Texture background;
 
-    public JLabel getTitleLabel () {
-        return titleLabel;
+    public enum InputMenuPos {
+        TITLE,
+        NAME_INPUT,
+        PLAYER_LIST,
+        BUTTON_MENU,
+        LAUNCH_BUTTON;
+        public final int y;
+        InputMenuPos() {
+            this.y = this.ordinal();
+        }
     }
+    private final static Dimension maxInfoPanelSize = new Dimension(700, 500);
+    private final static Dimension buttonSize = new Dimension(100, 25);
 
-    private JLabel prompt;
-
-    public JLabel getPrompt () {
-        return prompt;
-    }
+    protected JLabel prompt;
 
     private JTextField nameInput;
 
@@ -47,8 +53,18 @@ public class SFCFrame extends JFrame implements SFCComponent {
 
     protected JTextPane playerList;
 
-    public JTextPane getPlayerList () {
-        return playerList;
+    protected SFCPanel infoPanel;
+
+    protected SFCPanel mainPanel;
+
+    protected SFCPanel cardPanel;
+
+    protected SFCPanel buttonPanel;
+
+    protected GridBagConstraints gbc;
+
+    public static Dimension getScreenSize () {
+        return Toolkit.getDefaultToolkit().getScreenSize();
     }
 
     @Override
@@ -66,11 +82,11 @@ public class SFCFrame extends JFrame implements SFCComponent {
         this.setLNF();
         this.setTitle(title);
         this.setSize(w, h);
+        this.setMinimumSize(new Dimension(800, 600));
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         int x = (int) ((screenSize.getWidth() - w) / 2);
         int y = (int) ((screenSize.getHeight() - h) / 2);
         this.setLocation(x, y);
-        /*this.setResizable(false);*/
         this.background = Texture.MAT_TEXTURE;
         this.createUIComponents();
     }
@@ -80,45 +96,71 @@ public class SFCFrame extends JFrame implements SFCComponent {
      * Refer to gui_proto.png for more information.
      */
     private void createUIComponents () {
-        var contentPane = this.getContentPane();
-        SFCPanel mainPanel = new SFCPanel(background.getImage());
-        contentPane.add(mainPanel);
+        mainPanel = new SFCPanel(background);
+        mainPanel.setLayout(new BorderLayout());
+        this.add(mainPanel);
 
-        SFCPanel infoPanel = new SFCPanel(Texture.GUIG.getImage());
-        infoPanel.setMaximumSize(new Dimension(500, 500));
-        infoPanel.setPreferredSize(new Dimension(this.getWidth()/2, this.getHeight()/2));
-        infoPanel.setMinimumSize(new Dimension(200, 200));
-        mainPanel.add(infoPanel);
+        SFCButton testButton = new SFCButton("Test");
+        testButton.addActionListener(e -> {
+            System.out.println("Test");
+        });
+        mainPanel.add(testButton, BorderLayout.NORTH);
 
-        GridLayout infoLayout = new GridLayout(4, 1);
-        infoLayout.setVgap(10);
-        infoLayout.setHgap(10);
+        cardPanel = new SFCPanel(background);
+        GridBagLayout cardLayout = new GridBagLayout();
+        cardPanel.setLayout(cardLayout);
+        cardPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+
+        SFCPanel panel = new SFCPanel(background);
+        panel.setLayout(new GridBagLayout());
+        mainPanel.add(panel, BorderLayout.CENTER);
+        panel.add(createInfoPanel());
+        this.setMenuBar(createMenuBar());
+    }
+
+    /**
+     * Creates the player input menu and also win menu. (Hopefully)
+     */
+    private SFCPanel createInfoPanel() {
+
+        infoPanel = new SFCPanel(Texture.GUIG);
+        infoPanel.setPreferredSize(maxInfoPanelSize);
+
+        GridBagLayout infoLayout = new GridBagLayout();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
         infoPanel.setLayout(infoLayout);
-
         infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        titleLabel = new JLabel();
+        JLabel titleLabel = new JLabel("Choose between 2 and 8 player names.");
         titleLabel.setFont(new Font("Arial", Font.BOLD , 20));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        infoPanel.add(titleLabel);
+        gbc.gridy = InputMenuPos.TITLE.y;
+        gbc.fill = GridBagConstraints.BOTH;
+        infoPanel.add(titleLabel, gbc);
 
-        SFCPanel inputPanel = new SFCPanel(background.getImage());
-
+        SFCPanel inputPanel = new SFCPanel(background);
         inputPanel.setLayout(new GridLayout(1, 2));
         inputPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-        infoPanel.add(inputPanel);
+        inputPanel.setPreferredSize(new Dimension(450, 25));
+        gbc.gridy = InputMenuPos.NAME_INPUT.y;
+        infoPanel.add(inputPanel, gbc);
 
-        prompt = new JLabel();
+        prompt = new JLabel("Enter a nickname : ");
         prompt.setBackground(Color.WHITE);
         prompt.setFont(new Font("Arial", Font.BOLD, 14));
+        prompt.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 5));
         inputPanel.add(prompt);
 
         nameInput = new JTextField();
         nameInput.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         inputPanel.add(nameInput);
 
-        SFCPanel buttonPanel = new SFCPanel(background.getImage());
-        infoPanel.add(buttonPanel);
+        buttonPanel = new SFCPanel(background);
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        gbc.gridy = InputMenuPos.BUTTON_MENU.y;
+        infoPanel.add(buttonPanel, gbc);
 
         GridLayout buttonLayout = new GridLayout(1, 2);
         buttonLayout.setHgap(10);
@@ -126,27 +168,28 @@ public class SFCFrame extends JFrame implements SFCComponent {
 
         okButton = new SFCButton("OK");
         okButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        okButton.setMaximumSize(new Dimension(100, 50));
+        okButton.setPreferredSize(buttonSize);
         okButton.setAlignmentY(Component.CENTER_ALIGNMENT);
         buttonPanel.add(okButton);
 
         cancelButton = new SFCButton("Cancel");
         cancelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        cancelButton.setMaximumSize(new Dimension(100, 50));
+        cancelButton.setPreferredSize(buttonSize);
         cancelButton.setAlignmentY(Component.CENTER_ALIGNMENT);
         buttonPanel.add(cancelButton);
 
         launchButton = new SFCButton("Start Game");
         launchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        launchButton.setMaximumSize(new Dimension(100, 50));
+        launchButton.setMaximumSize(buttonSize);
         launchButton.setAlignmentY(Component.CENTER_ALIGNMENT);
 
         playerList = new JTextPane();
         playerList.setFont(new Font("Arial", Font.PLAIN, 14));
         playerList.setEditable(false);
-        infoPanel.add(playerList);
-
-        this.setMenuBar(createMenuBar());
+        playerList.setBackground(new Color(0, 0, 0, 0));
+        gbc.gridy = InputMenuPos.PLAYER_LIST.y;
+        infoPanel.add(playerList, gbc);
+        return infoPanel;
     }
 
     private void setLNF() {
@@ -168,12 +211,24 @@ public class SFCFrame extends JFrame implements SFCComponent {
 
     private MenuBar createMenuBar() {
         MenuBar menuBar = new MenuBar();
-        menuBar.setFont(new Font("Arial", Font.BOLD, 14));
+        menuBar.setFont(new Font("Arial", Font.BOLD , 14));
+
         Menu menu = new Menu("Menu");
         MenuItem exitItem = new MenuItem("Exit");
         exitItem.addActionListener(e -> this.dispose());
         menu.add(exitItem);
+        MenuItem aboutItem = new MenuItem("About");
+        aboutItem.addActionListener(l -> {
+            try {
+                Desktop.getDesktop().browse(new URL("https://www.youtube.com/watch?v=dQw4w9WgXcQ").toURI());
+            } catch (Exception e) {
+                System.out.println("Bruh");
+            }
+        });
+        menu.add(aboutItem);
         menuBar.add(menu);
+
+
         return menuBar;
     }
 }

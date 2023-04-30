@@ -1,39 +1,59 @@
 package Skyjo_frenic;
 
+import Skyjo_frenic.gui.CardButton;
 import Skyjo_frenic.gui.SFCFrame;
 import Skyjo_frenic.basics.Card;
 import Skyjo_frenic.basics.GameState;
 import Skyjo_frenic.basics.Player;
 import Skyjo_frenic.gui.Texture;
 
-import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 
 /**
  * Not sure if the game class should extend the SFCFrame class or just contain it as an object
  * TODO : remove
  */
 public class Game extends SFCFrame {
-    private final ArrayDeque<Player> players;
+    private final ArrayList<Player> players;
     private final ArrayDeque<Card> drawPile;
     private final ArrayDeque<Card> discardPile;
+    private final ArrayList<CardButton> playerCards;
+    private Player currentPlayer;
     private static final int MAX_CARD_AMOUNT = 108;
+    public static final int MAX_CARDS_PER_HAND = 12;
     private int turn;
     private GameState state;
 
     public Game() {
-        super("Skyjo_frenic", 1920, 1080);
-        this.players = new ArrayDeque<>();
+        super("Skyjo_frenic", 800, 400);
+        this.players = new ArrayList<>();
         this.state = GameState.INIT;
         this.drawPile = generateDeck();
-        super.setIconImage(Texture.MAT_TEXTURE.getImage());
+        super.setIconImage(Texture.CARD_BACK.getImage());
         this.discardPile = new ArrayDeque<>(MAX_CARD_AMOUNT);
-        super.getTitleLabel().setText("Choose between 2 and 8 player names.");
-        super.getPrompt().setText("Enter a nickname : ");
+        this.playerCards = createPlayerCards();
         super.getOkButton().addActionListener(e -> nameInputHandler());
         super.getCancelButton().addActionListener(e -> removePlayerHandler());
         super.getNameInput().addActionListener(e -> nameInputHandler());
         this.turn = 0;
+        this.currentPlayer = null;
+        this.updatePlayerList();
+    }
+
+    private ArrayList<CardButton> createPlayerCards() {
+        ArrayList<CardButton> playerCards = new ArrayList<>(MAX_CARDS_PER_HAND);
+        for(int i = 0; i < MAX_CARDS_PER_HAND; i++) {
+            CardButton cardButton = new CardButton();
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridx = i % 4;
+            gbc.gridy = i / 4;
+            gbc.insets = new Insets(10, 10, 10, 10);
+            super.cardPanel.add(cardButton, gbc);
+            playerCards.add(cardButton);
+        }
+        return playerCards;
     }
 
     public void begin() {
@@ -42,10 +62,6 @@ public class Game extends SFCFrame {
 
     @Override
     public String toString() {
-        /*
-        * I don't know why my IDE told me to use StringBuilder,
-        * my google research told me it's better in string concatenation, but it seems more verbose.
-        */
         if(!players.isEmpty()) {
             StringBuilder s = new StringBuilder("The game has " + players.size() + " players :\n");
             for (final var player : players) {
@@ -87,7 +103,7 @@ public class Game extends SFCFrame {
         ArrayDeque<Card> deck = new ArrayDeque<>(MAX_CARD_AMOUNT);
         for (int i = 0; i < MAX_CARD_AMOUNT; ++i) {
             deck.add(new Card((int) (Math.random() * MAX_CARD_AMOUNT),
-                     Texture.CARD_BACK, null));
+                     Texture.CARD_BACK, Texture.GUIG, null));
         }
         return deck;
     }
@@ -99,30 +115,33 @@ public class Game extends SFCFrame {
      */
     private void gameStartHandler () {
         this.state = GameState.PLAYING;
-        //Distributing starting cards
-        for(final var player : players) {
-            for(int i = 0; i < Player.MAX_CARDS_PER_HAND; ++i) {
+        infoPanel.SFCHide();
+        mainPanel.add(cardPanel, BorderLayout.CENTER);
+        //Distributing starting cards and show the card of the first player
+        for(int i = 0; i < MAX_CARDS_PER_HAND; ++i) {
+            for(final var player : players) {
                 Card card = drawPile.removeLast();
                 card.setAssociatedPlayer(player);
                 player.addCardToHand(card);
             }
         }
-        this.play();
+        changeCurrentPlayer();
+        super.cardPanel.SFCShow();
     }
 
-    /**
-     * Since the game is event driven, we don't really need a play function.
-     * So the goal of this function is to set the correct handlers on the cards
-     */
-    private void play(){
-
+    private Player getNextPlayer() {
+        if(this.currentPlayer == null) {
+            return players.get(0);
+        }
+        return players.get(this.currentPlayer.getPlayerNumber());
     }
 
-    /**
-     * Exit the game by closing the associated window
-     */
-    public void quit() {
-        this.dispose();
+    private void changeCurrentPlayer() {
+        Player player = getNextPlayer();
+        for (int i = 0; i < MAX_CARDS_PER_HAND; ++i) {
+            this.playerCards.get(i).setAssociatedCard(player.getCurrentHand().get(i));
+        }
+        this.currentPlayer = player;
     }
 
     /**
@@ -130,7 +149,7 @@ public class Game extends SFCFrame {
      */
     private void removePlayerHandler () {
         if(!players.isEmpty()){
-            this.players.removeLast();
+            this.players.remove(players.size()-1);
             updatePlayerList();
         }
     }
@@ -147,32 +166,35 @@ public class Game extends SFCFrame {
         String name = super.getNameInput().getText();
         if (!isNameValid(name)) {
             /*super.getPrompt().setFont(new Font("Arial", Font.BOLD, 14));*/
-            super.getPrompt().setText("Invalid name. Please enter a name without special characters.");
+            super.prompt.setText("Invalid name. Please enter a name without special characters.");
             return;
         }
 
         if (isNameAlreadyUsed(name)) {
-            super.getPrompt().setText("This name is already in use !");
+            super.prompt.setText("This name is already in use !");
             return;
         }
 
         if (players.size() < 8) {
             super.getNameInput().setText("");
-            players.add(new Player(name));
+            players.add(new Player(name, players.size()));
             updatePlayerList();
-            super.getPrompt().setText("Please enter the next name :");
+            super.prompt.setText("Please enter the next name :");
 
             //Try to make it so that when the game can start, the "start game" button pops up
             //I don't know how though :'(
             if (players.size() >= 2) {
                 super.getLaunchButton().addActionListener(e -> gameStartHandler());
+                super.gbc.gridy = InputMenuPos.LAUNCH_BUTTON.y;
+                super.infoPanel.add(super.getLaunchButton(), gbc);
             }
 
             return;
         }
 
         //If all the above tests failed then it means that the game is full
-        super.getPrompt().setText("Cannot add more players, please start the game.");
+        super.prompt.setText("Cannot add more players, please start the game.");
+        super.infoPanel.remove(super.buttonPanel);
     }
 
     private void updatePlayerList () {

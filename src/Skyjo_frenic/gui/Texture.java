@@ -4,12 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * TODO : Implement later after all the code is done.
+ * This is a texture repertory to help
+ * with changing the textures of  the game without having to change the code everytime.
  */
 public enum Texture {
-    CARD_BACK("ressources/textures/card_back.png"),
-    MAT_TEXTURE("ressources/textures/mat_background.png"),
-    GUIG("ressources/textures/guig.png");
+    CARD_BACK("resources/textures/card_back.png"),
+    MAT_TEXTURE("resources/textures/mat_background.png"),
+    GUIG("resources/textures/guig.png");
 
     private final Image image;
 
