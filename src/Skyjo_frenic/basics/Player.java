@@ -12,27 +12,26 @@ public class Player {
         return points;
     }
 
-    public void setPoints (int points) {
-        this.points = points;
-    }
-
-    public void addPoints(int points) {
+    public void addPoints (int points) {
+        ++this.cardsFlippedThisTurn;
         this.points += points;
     }
 
     private int turn;
+    private int cardsFlippedThisTurn;
 
     public int getTurn() {
         return this.turn;
     }
 
     public void addTurn() {
+        this.cardsFlippedThisTurn = 0;
         ++this.turn;
     }
 
     private final int playerNumber;
 
-    public int getPlayerNumber() {
+    public int getPlayerNumber () {
         return this.playerNumber;
     }
 
@@ -47,33 +46,36 @@ public class Player {
     }
 
     private final String name;
-    public Player(String name, int playerNumber) {
+
+    public Player (String name, int playerNumber) {
         this.name = name;
         this.points = 0;
+        this.cardsFlippedThisTurn = 0;
         this.currentHand = new ArrayList<>(Game.MAX_CARDS_PER_HAND);
         this.playerNumber = playerNumber;
     }
 
-    // Might be useless
-    public void revealCard(int x, int y) {
-        // TODO
+    public boolean canSwitchPlayer() {
+        if(this.turn == 0) {
+            return this.cardsFlippedThisTurn == 2;
+        }
+        if(this.cardsFlippedThisTurn == 1){
+            return true;
+        }
+        return false;
+
     }
 
-    /*public void displayCurrentHand () {
-        for(var card : currentHand) {
-            card.show();
+    public boolean canFlipCard() {
+        if(this.turn == 0) {
+            return this.cardsFlippedThisTurn < 2;
         }
+        return this.cardsFlippedThisTurn < 1;
     }
 
-    public void hideCurrentHand () {
-        for(var card : currentHand) {
-            card.hide();
-        }
-    }*/
-
-    public boolean areAllCardsRevealed() {
-        for(final var card : currentHand) {
-            if (!card.isRevealed()) {
+    public boolean allCardsRevealed() {
+        for(Card card : this.currentHand) {
+            if(!card.isRevealed()) {
                 return false;
             }
         }
@@ -83,8 +85,6 @@ public class Player {
     public void addCardToHand(Card card) {
         this.currentHand.add(card);
     }
-
-
 
     @Override
     public String toString () {

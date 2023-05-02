@@ -10,3 +10,6 @@
 Each turn a player can choose to draw from the deck or from the discard pile  
 
 For now the starting part works, ie the part when the players can start playing
+
+Need to make it so that each player has to flip two of their cards to 
+determine who's the first to play.  

@@ -3,9 +3,8 @@ package Skyjo_frenic;
 import Skyjo_frenic.gui.CardButton;
 import Skyjo_frenic.gui.SFCFrame;
 import Skyjo_frenic.basics.Card;
-import Skyjo_frenic.basics.GameState;
 import Skyjo_frenic.basics.Player;
-import Skyjo_frenic.gui.Texture;
+import Skyjo_frenic.gui.SFCTexture;
 
 import java.awt.*;
 import java.util.ArrayDeque;
@@ -23,35 +22,32 @@ public class Game extends SFCFrame {
     private Player currentPlayer;
     private static final int MAX_CARD_AMOUNT = 108;
     public static final int MAX_CARDS_PER_HAND = 12;
-    private int turn;
-    private GameState state;
 
     public Game() {
         super("Skyjo_frenic", 800, 400);
         this.players = new ArrayList<>();
-        this.state = GameState.INIT;
         this.drawPile = generateDeck();
-        super.setIconImage(Texture.CARD_BACK.getImage());
+        super.setIconImage(SFCTexture.CARD_BACK.getImage());
         this.discardPile = new ArrayDeque<>(MAX_CARD_AMOUNT);
         this.playerCards = createPlayerCards();
         super.getOkButton().addActionListener(e -> nameInputHandler());
         super.getCancelButton().addActionListener(e -> removePlayerHandler());
-        super.getNameInput().addActionListener(e -> nameInputHandler());
-        this.turn = 0;
+        super.nameInput.addActionListener(e -> nameInputHandler());
         this.currentPlayer = null;
         this.updatePlayerList();
     }
 
+    /**
+     * Creates the buttons associated to the current player's hand
+     * The buttons are created and never change after that, it's only the card that they reference that changes
+     * @return The list of buttons
+     */
     private ArrayList<CardButton> createPlayerCards() {
         ArrayList<CardButton> playerCards = new ArrayList<>(MAX_CARDS_PER_HAND);
+        GridBagConstraints cardgbc = new GridBagConstraints();
+        Insets insets = new Insets(10, 10, 10, 10);
         for(int i = 0; i < MAX_CARDS_PER_HAND; i++) {
-            CardButton cardButton = new CardButton();
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridx = i % 4;
-            gbc.gridy = i / 4;
-            gbc.insets = new Insets(10, 10, 10, 10);
-            super.cardPanel.add(cardButton, gbc);
-            playerCards.add(cardButton);
+            playerCards.add(new CardButton(i%4, i/4, cardPanel, cardgbc, insets));
         }
         return playerCards;
     }
@@ -60,12 +56,15 @@ public class Game extends SFCFrame {
         super.SFCShow();
     }
 
+    /**
+     * This function is what displays the number of players and their names in the list on the info panel
+     */
     @Override
     public String toString() {
-        if(!players.isEmpty()) {
-            StringBuilder s = new StringBuilder("The game has " + players.size() + " players :\n");
-            for (final var player : players) {
-                s.append("\t- ").append(player).append("\n");
+        if(!this.players.isEmpty()) {
+            StringBuilder s = new StringBuilder("The game has " + this.players.size() + " players :\n");
+            for (final var player : this.players) {
+                s.append("\t- ").append(player.getName()).append("\n");
             }
             return s.toString();
         }
@@ -103,21 +102,33 @@ public class Game extends SFCFrame {
         ArrayDeque<Card> deck = new ArrayDeque<>(MAX_CARD_AMOUNT);
         for (int i = 0; i < MAX_CARD_AMOUNT; ++i) {
             deck.add(new Card((int) (Math.random() * MAX_CARD_AMOUNT),
-                     Texture.CARD_BACK, Texture.GUIG, null));
+                              SFCTexture.CARD_BACK, SFCTexture.GUIG, null));
         }
         return deck;
     }
 
     /**
+     * Changes the UI to show what's necessary to play the game and hide the info panel
+     */
+    private void setPlayingUI() {
+        super.popupPanel.SFCHide();
+        super.infoPanelGBC.gridy = 0;
+        super.infoPanelGBC.gridx = 0;
+        super.popupPanelContainer.add(cardPanel, super.infoPanelGBC);
+        super.nextPlayerButton.addActionListener(e -> changeCurrentPlayer());
+        actionsPanelGBC.gridy = 1;
+        super.actionsPanel.add(super.nextPlayerButton, actionsPanelGBC);
+    }
+
+    /**
      * Event handler for the "Start game" button
-     * Sets the game's state to PLAYING to ensure that everything is going smoothly
-     * Distributes the starting cards
+     * Distributes the starting card and shows the cards of the first player
+     * and hides the info panel
      */
     private void gameStartHandler () {
-        this.state = GameState.PLAYING;
-        infoPanel.SFCHide();
-        mainPanel.add(cardPanel, BorderLayout.CENTER);
-        //Distributing starting cards and show the card of the first player
+        this.setPlayingUI();
+
+        //Distributing starting cards and show the cards of the first player
         for(int i = 0; i < MAX_CARDS_PER_HAND; ++i) {
             for(final var player : players) {
                 Card card = drawPile.removeLast();
@@ -125,32 +136,69 @@ public class Game extends SFCFrame {
                 player.addCardToHand(card);
             }
         }
-        changeCurrentPlayer();
+
+        //Now that the cards are distributed, we can associate the first player's cards to the buttons
+        this.associateCurrentPlayerToCardButtons();
+        this.updateInfoLabel();
+
         super.cardPanel.SFCShow();
     }
 
+    /**
+     *
+     * @return The next player in the list and cycles back to the first player if the last player was reached
+     */
     private Player getNextPlayer() {
-        if(this.currentPlayer == null) {
-            return players.get(0);
-        }
-        return players.get(this.currentPlayer.getPlayerNumber());
+        return players.get(this.currentPlayer.getPlayerNumber() % this.players.size());
     }
 
-    private void changeCurrentPlayer() {
-        Player player = getNextPlayer();
-        for (int i = 0; i < MAX_CARDS_PER_HAND; ++i) {
-            this.playerCards.get(i).setAssociatedCard(player.getCurrentHand().get(i));
+    private void associateCurrentPlayerToCardButtons() {
+        for(int i = 0; i < MAX_CARDS_PER_HAND; ++i) {
+            CardButton temp = this.playerCards.get(i);
+            temp.setAssociatedCard(this.currentPlayer.getCurrentHand().get(i));
+            temp.updateTexture();
         }
-        this.currentPlayer = player;
     }
 
     /**
-     * Removes the last player added in the players list when someone clicks the "Cancel button"
+     * Sets the current player to the player with the highest score in the list
+     * Used to determine which player starts the game
+     */
+    private void setStartingPlayer() {
+        int highestScore = 0;
+        for(final var player : players) {
+            if(player.getPoints() > highestScore) {
+                highestScore = player.getPoints();
+                this.currentPlayer = player;
+            }
+        }
+    }
+
+    /**
+     * Changes the current player and associates the card buttons on screen to the current player's hand
+     * Also makes sure that the player can switch player before going to the next player
+     */
+    private void changeCurrentPlayer() {
+        if(currentPlayer.canSwitchPlayer()) {
+            this.currentPlayer.addTurn();
+            this.currentPlayer = this.getNextPlayer();
+            this.updateInfoLabel();
+            System.out.println("Current player : " + currentPlayer + " , score : " + currentPlayer.getPoints());
+            this.associateCurrentPlayerToCardButtons();
+            return;
+        }
+        if(currentPlayer.getTurn() == 0){
+            System.out.println("You must flip two cards before switching player !");
+        }
+    }
+
+    /**
+     * Removes the last player added in the players list when someone clicks the "Cancel" button
      */
     private void removePlayerHandler () {
-        if(!players.isEmpty()){
+        if(!this.players.isEmpty()){
             this.players.remove(players.size()-1);
-            updatePlayerList();
+            this.updatePlayerList();
         }
     }
 
@@ -163,10 +211,9 @@ public class Game extends SFCFrame {
      * TODO : Rename method
      */
     private void nameInputHandler () {
-        String name = super.getNameInput().getText();
+        String name = super.nameInput.getText();
         if (!isNameValid(name)) {
-            /*super.getPrompt().setFont(new Font("Arial", Font.BOLD, 14));*/
-            super.prompt.setText("Invalid name. Please enter a name without special characters.");
+            super.prompt.setText("Only alphanumeric characters are allowed !");
             return;
         }
 
@@ -176,17 +223,20 @@ public class Game extends SFCFrame {
         }
 
         if (players.size() < 8) {
-            super.getNameInput().setText("");
-            players.add(new Player(name, players.size()));
-            updatePlayerList();
+            super.nameInput.setText("");
+            this.players.add(new Player(name, players.size()+1));
+            this.updatePlayerList();
             super.prompt.setText("Please enter the next name :");
 
-            //Try to make it so that when the game can start, the "start game" button pops up
-            //I don't know how though :'(
-            if (players.size() >= 2) {
+            //Set the first player who joined as the player who will play first
+            if(this.players.size() == 1) {
+                this.currentPlayer = this.players.get(0);
+            }
+
+            if (this.players.size() == 2) {
                 super.getLaunchButton().addActionListener(e -> gameStartHandler());
-                super.gbc.gridy = InputMenuPos.LAUNCH_BUTTON.y;
-                super.infoPanel.add(super.getLaunchButton(), gbc);
+                super.infoPanelGBC.gridy = InputMenuPos.LAUNCH_BUTTON.y;
+                super.popupPanel.add(super.getLaunchButton(), infoPanelGBC);
             }
 
             return;
@@ -194,17 +244,27 @@ public class Game extends SFCFrame {
 
         //If all the above tests failed then it means that the game is full
         super.prompt.setText("Cannot add more players, please start the game.");
-        super.infoPanel.remove(super.buttonPanel);
+        super.popupPanel.remove(super.buttonPanel);
     }
 
+    /**
+     * Updates the player list on the info screen
+     */
     private void updatePlayerList () {
         playerList.setText(this.toString());
+        super.repaint();
     }
+
 
     private Card drawCard() {
         if(drawPile.isEmpty()) {
             //TODO : shuffle the discard pile into the draw pile
         }
         return drawPile.removeLast();
+    }
+
+    private void updateInfoLabel() {
+        super.infoLabel.setText("Current player : " + this.currentPlayer.getName());
+        super.repaint();
     }
 }

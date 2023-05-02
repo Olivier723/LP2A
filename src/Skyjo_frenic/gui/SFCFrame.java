@@ -2,15 +2,15 @@ package Skyjo_frenic.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.net.URL;
 
 public class SFCFrame extends JFrame implements SFCComponent {
-
-    // Get the user's screen size to make the UI reactive (hopefully)
     public final Dimension screenSize;
-
-    private final Texture background;
-
+    private final SFCTexture background;
     public enum InputMenuPos {
         TITLE,
         NAME_INPUT,
@@ -27,11 +27,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
 
     protected JLabel prompt;
 
-    private JTextField nameInput;
-
-    public JTextField getNameInput () {
-        return nameInput;
-    }
+    protected JTextField nameInput;
 
     private SFCButton okButton;
 
@@ -55,13 +51,28 @@ public class SFCFrame extends JFrame implements SFCComponent {
 
     protected SFCPanel infoPanel;
 
+    protected JLabel infoLabel;
+
+    protected SFCPanel popupPanel;
+
+    protected SFCPanel popupPanelContainer;
+
     protected SFCPanel mainPanel;
 
     protected SFCPanel cardPanel;
 
     protected SFCPanel buttonPanel;
 
-    protected GridBagConstraints gbc;
+    protected SFCButton nextPlayerButton;
+
+    protected SFCPanel actionsPanel;
+
+    protected SFCButton drawButton;
+
+    protected SFCButton discardButton;
+
+    protected GridBagConstraints infoPanelGBC;
+    protected GridBagConstraints actionsPanelGBC;
 
     public static Dimension getScreenSize () {
         return Toolkit.getDefaultToolkit().getScreenSize();
@@ -83,11 +94,20 @@ public class SFCFrame extends JFrame implements SFCComponent {
         this.setTitle(title);
         this.setSize(w, h);
         this.setMinimumSize(new Dimension(800, 600));
-        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        // Makes it so that the program asks if the user wants to quit before closing.
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing (WindowEvent e) {
+                quit();
+            }
+        });
+
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         int x = (int) ((screenSize.getWidth() - w) / 2);
         int y = (int) ((screenSize.getHeight() - h) / 2);
         this.setLocation(x, y);
-        this.background = Texture.MAT_TEXTURE;
+        this.background = SFCTexture.MAT_TEXTURE;
         this.createUIComponents();
     }
 
@@ -97,55 +117,101 @@ public class SFCFrame extends JFrame implements SFCComponent {
      */
     private void createUIComponents () {
         mainPanel = new SFCPanel(background);
+        /*mainPanel.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized (ComponentEvent e) {
+                super.componentResized(e);
+                Dimension size = mainPanel.getSize();
+                Dimension newSize = new Dimension(size.width - 20, size.height - 20);
+                infoPanel.setPreferredSize(newSize);
+            }
+        });*/
         mainPanel.setLayout(new BorderLayout());
         this.add(mainPanel);
 
-        SFCButton testButton = new SFCButton("Test");
-        testButton.addActionListener(e -> {
-            System.out.println("Test");
-        });
-        mainPanel.add(testButton, BorderLayout.NORTH);
+        nextPlayerButton = new SFCButton("Next Player");
+        nextPlayerButton.setPreferredSize(buttonSize);
 
-        cardPanel = new SFCPanel(background);
-        GridBagLayout cardLayout = new GridBagLayout();
+        cardPanel = new SFCPanel(SFCTexture.GUIG);
+        /*GridBagLayout cardLayout = new GridBagLayout();*/
+        GridLayout cardLayout = new GridLayout(3, 4);
+        cardPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         cardPanel.setLayout(cardLayout);
+        cardPanel.setMaximumSize(new Dimension(700,700 ));
+
+        cardPanel.setMinimumSize(new Dimension(700, 700));
         cardPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        actionsPanel = new SFCPanel();
+        actionsPanel.setLayout(new GridBagLayout());
+        actionsPanelGBC = new GridBagConstraints();
+        mainPanel.add(actionsPanel, BorderLayout.EAST);
 
-        SFCPanel panel = new SFCPanel(background);
-        panel.setLayout(new GridBagLayout());
-        mainPanel.add(panel, BorderLayout.CENTER);
-        panel.add(createInfoPanel());
+        drawButton = new SFCButton("Draw");
+        actionsPanelGBC.gridx = 0;
+        actionsPanelGBC.gridy = 0;
+        drawButton.setMaximumSize(CardButton.maximumSize);
+        drawButton.setMinimumSize(CardButton.minimumSize);
+        actionsPanel.add(drawButton, actionsPanelGBC);
+
+        discardButton = new SFCButton("Discard");
+        actionsPanelGBC.gridy = 2;
+        discardButton.setMaximumSize(CardButton.maximumSize);
+        discardButton.setMinimumSize(CardButton.minimumSize);
+        actionsPanel.add(drawButton, actionsPanelGBC);
+
+        /*SFCPanel padding = new SFCPanel(background);
+        padding.setPreferredSize(CardButton.cardSize);
+        mainPanel.add(padding, BorderLayout.WEST);*/
+
+        infoPanel = new SFCPanel();
+
+        infoLabel = new JLabel();
+        infoLabel.setForeground(Color.WHITE);
+        infoLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        infoPanel.add(infoLabel);
+        mainPanel.add(infoPanel, BorderLayout.WEST);
+
+
+
+        mainPanel.add(createPopupPanel(), BorderLayout.CENTER);
         this.setMenuBar(createMenuBar());
     }
 
     /**
      * Creates the player input menu and also win menu. (Hopefully)
      */
-    private SFCPanel createInfoPanel() {
+    private SFCPanel createPopupPanel () {
 
-        infoPanel = new SFCPanel(Texture.GUIG);
-        infoPanel.setPreferredSize(maxInfoPanelSize);
+        popupPanelContainer = new SFCPanel(SFCTexture.CARD_BACK);
+        popupPanelContainer.setLayout(new GridBagLayout());
+
+        popupPanel = new SFCPanel(SFCTexture.GUIG);
+        popupPanel.setPreferredSize(maxInfoPanelSize);
+        popupPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
+        infoPanelGBC = new GridBagConstraints();
+        infoPanelGBC.weightx = 1;
+        infoPanelGBC.weighty = 1;
+
+        popupPanelContainer.add(popupPanel, infoPanelGBC);
 
         GridBagLayout infoLayout = new GridBagLayout();
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        infoPanel.setLayout(infoLayout);
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        infoPanelGBC.gridx = 0;
+        popupPanel.setLayout(infoLayout);
+        popupPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JLabel titleLabel = new JLabel("Choose between 2 and 8 player names.");
         titleLabel.setFont(new Font("Arial", Font.BOLD , 20));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        gbc.gridy = InputMenuPos.TITLE.y;
-        gbc.fill = GridBagConstraints.BOTH;
-        infoPanel.add(titleLabel, gbc);
+        infoPanelGBC.gridy = InputMenuPos.TITLE.y;
+        popupPanel.add(titleLabel, infoPanelGBC);
 
         SFCPanel inputPanel = new SFCPanel(background);
         inputPanel.setLayout(new GridLayout(1, 2));
         inputPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         inputPanel.setPreferredSize(new Dimension(450, 25));
-        gbc.gridy = InputMenuPos.NAME_INPUT.y;
-        infoPanel.add(inputPanel, gbc);
+        infoPanelGBC.gridy = InputMenuPos.NAME_INPUT.y;
+        popupPanel.add(inputPanel, infoPanelGBC);
 
         prompt = new JLabel("Enter a nickname : ");
         prompt.setBackground(Color.WHITE);
@@ -159,8 +225,8 @@ public class SFCFrame extends JFrame implements SFCComponent {
 
         buttonPanel = new SFCPanel(background);
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        gbc.gridy = InputMenuPos.BUTTON_MENU.y;
-        infoPanel.add(buttonPanel, gbc);
+        infoPanelGBC.gridy = InputMenuPos.BUTTON_MENU.y;
+        popupPanel.add(buttonPanel, infoPanelGBC);
 
         GridLayout buttonLayout = new GridLayout(1, 2);
         buttonLayout.setHgap(10);
@@ -187,9 +253,9 @@ public class SFCFrame extends JFrame implements SFCComponent {
         playerList.setFont(new Font("Arial", Font.PLAIN, 14));
         playerList.setEditable(false);
         playerList.setBackground(new Color(0, 0, 0, 0));
-        gbc.gridy = InputMenuPos.PLAYER_LIST.y;
-        infoPanel.add(playerList, gbc);
-        return infoPanel;
+        infoPanelGBC.gridy = InputMenuPos.PLAYER_LIST.y;
+        popupPanel.add(playerList, infoPanelGBC);
+        return popupPanelContainer;
     }
 
     private void setLNF() {
@@ -215,7 +281,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
 
         Menu menu = new Menu("Menu");
         MenuItem exitItem = new MenuItem("Exit");
-        exitItem.addActionListener(e -> this.dispose());
+        exitItem.addActionListener(e -> this.quit());
         menu.add(exitItem);
         MenuItem aboutItem = new MenuItem("About");
         aboutItem.addActionListener(l -> {
@@ -230,5 +296,35 @@ public class SFCFrame extends JFrame implements SFCComponent {
 
 
         return menuBar;
+    }
+
+    /**
+     * Creates a dialog box to confirm quitting the game.
+     */
+    public void quit() {
+        JDialog dialog = new JDialog(this, "Quit", true);
+        dialog.setLayout(new BorderLayout());
+        dialog.setPreferredSize(new Dimension(250, 100));
+        dialog.setResizable(false);
+        JLabel dialogLabel = new JLabel("Are you sure you want to quit?");
+        dialogLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        dialogLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        dialog.add(dialogLabel, BorderLayout.CENTER);
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        SFCButton yesButton = new SFCButton("Yes");
+        yesButton.addActionListener(e -> this.dispose());
+
+        SFCButton noButton = new SFCButton("No");
+        noButton.addActionListener(e -> dialog.dispose());
+
+        SFCPanel buttonPanel = new SFCPanel(background);
+        buttonPanel.setLayout(new GridLayout(1, 2));
+        buttonPanel.add(yesButton);
+        buttonPanel.add(noButton);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+
     }
 }
