@@ -1,34 +1,58 @@
 package Skyjo_frenic;
 
+import Skyjo_frenic.basics.CSVReader;
 import Skyjo_frenic.gui.CardButton;
 import Skyjo_frenic.gui.SFCFrame;
 import Skyjo_frenic.basics.Card;
 import Skyjo_frenic.basics.Player;
 import Skyjo_frenic.gui.SFCTexture;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Not sure if the game class should extend the SFCFrame class or just contain it as an object
  * TODO : remove
  */
 public class Game extends SFCFrame {
-    private final ArrayList<Player> players;
 
+    private static final int MAX_CARD_AMOUNT = 108;
+    public static final int MAX_CARDS_PER_HAND = 12;
+
+    //TODO : Restructure a card pile in a class containing the methods to draw and discard cards
+    private static class CardPile implements Iterable<Card> {
+        private final ArrayDeque<Card> cardPile;
+
+
+        public CardPile () {
+            this.cardPile = new ArrayDeque<>(MAX_CARD_AMOUNT);
+        }
+
+        public void addCard (Card card) {
+            this.cardPile.add(card);
+        }
+
+        public Card drawCard () {
+            return this.cardPile.pop();
+        }
+        @NotNull
+        @Override
+        public Iterator<Card> iterator () {
+            return this.cardPile.iterator();
+        }
+    }
+    private final ArrayList<Player> players;
     public Player getLastPlayer () {
         return this.players.get(players.size()-1);
     }
-
     private final ArrayDeque<Card> drawPile;
     private final ArrayDeque<Card> discardPile;
     private final ArrayList<CardButton> playerCards;
     private boolean isStartFinished = false;
     private Player currentPlayer;
-    private Card selectedCard;
-    private static final int MAX_CARD_AMOUNT = 108;
-    public static final int MAX_CARDS_PER_HAND = 12;
 
     public Game() {
         super("Skyjo_frenic", 800, 400);
@@ -41,7 +65,6 @@ public class Game extends SFCFrame {
         super.getCancelButton().addActionListener(e -> removePlayerHandler());
         super.nameInput.addActionListener(e -> nameInputHandler());
         this.currentPlayer = null;
-        this.selectedCard = null;
         this.updatePlayerList();
     }
 
@@ -55,12 +78,13 @@ public class Game extends SFCFrame {
         GridBagConstraints cardgbc = new GridBagConstraints();
         Insets insets = new Insets(10, 10, 10, 10);
         for(int i = 0; i < MAX_CARDS_PER_HAND; i++) {
-            playerCards.add(new CardButton(i%4, i/4, cardPanel, cardgbc, insets));
+            playerCards.add(new CardButton(i%4, i/4, cardPanel, cardgbc, insets, this));
         }
         return playerCards;
     }
 
     public void begin() {
+        var cardData = CSVReader.readCSV("/home/Olivier/Documents/Code/Java/LP2A/resources/data/Lol.csv");
         super.SFCShow();
     }
 
@@ -189,8 +213,8 @@ public class Game extends SFCFrame {
                 this.isStartFinished = true;
                 this.setStartingPlayer();
                 super.announce("The game has started !\n" + this.currentPlayer.getName() + " will start the game !");
-                super.drawButton.addActionListener(e -> drawFrom(this.drawPile));
-                super.discardButton.addActionListener(e -> discardCard());
+                super.drawButton.addActionListener(e -> drawPileHandler());
+                super.discardButton.addActionListener(e -> discardPileHandler());
 
             }
             //Otherwise, we just switch players normally
@@ -212,10 +236,11 @@ public class Game extends SFCFrame {
         if(!this.players.isEmpty()){
             this.players.remove(players.size()-1);
             this.updatePlayerList();
+            if(this.players.size() < 2) {
+                super.getLaunchButton().SFCHide();
+            }
         }
     }
-
-
 
     /**
      * The event handler for the game startup so that when you click the "OK" button,
@@ -226,12 +251,12 @@ public class Game extends SFCFrame {
     private void nameInputHandler () {
         String name = super.nameInput.getText();
         if (!Player.isNameValid(name)) {
-            super.prompt.setText("Only alphanumeric characters are allowed !");
+            super.announce("Only alphanumeric characters are allowed !");
             return;
         }
 
         if (this.isNameAlreadyUsed(name)) {
-            super.prompt.setText("This name is already in use !");
+            super.announce("This name is already in use !");
             return;
         }
 
@@ -251,12 +276,11 @@ public class Game extends SFCFrame {
                 super.infoPanelGBC.gridy = InputMenuPos.LAUNCH_BUTTON.y;
                 super.popupPanel.add(super.getLaunchButton(), infoPanelGBC);
             }
-
             return;
         }
 
         //If all the above tests failed then it means that the game is full
-        super.prompt.setText("Cannot add more players, please start the game.");
+        super.announce("Cannot add more players, please start the game.");
         super.popupPanel.remove(super.buttonPanel);
     }
 
@@ -264,28 +288,92 @@ public class Game extends SFCFrame {
      * Updates the player list on the info screen
      */
     private void updatePlayerList () {
-        playerList.setText(this.toString());
+        this.playerList.setText(this.toString());
         super.repaint();
     }
 
+    /**
+     * <h4>This method is used exclusively by this class only if the card drawn by the current player is not useful to him</h4>
+     * Discards a player's selected card if he has one
+     * and then sets his selected card to null while also de-referencing the card's associated player
+     * If a player has no selected card, does nothing
+     */
     private void discardCard() {
-        this.discardPile.add(this.selectedCard);
+        if(this.currentPlayer == null){
+            System.err.println("[ERROR] Current player is null !");
+            return;
+        }
+        if(this.currentPlayer.getSelectedCard() == null) {
+            return;
+        }
+        this.currentPlayer.getSelectedCard().setAssociatedPlayer(null);
+        super.announce("You have discarded a " + this.currentPlayer.getSelectedCard());
+        this.discardPile.add(this.currentPlayer.getSelectedCard());
+        this.currentPlayer.setSelectedCard(null);
     }
 
-
-    private void drawFrom(ArrayDeque<Card> pile) throws NullPointerException {
-        if(pile == null){
-            throw new NullPointerException("The given pile is null");
+    /**
+     * <h4>This method is used exclusively by the CardButton class to discard the card associated with it before it is overwritten by the associated player's new card</h4>
+     * Simply adds the card to the discard pile if the card is not null and <em>does not handle anything else</em>
+     * @param card the card to discard
+     */
+    public void discardCard(Card card) {
+        if(card == null) {
+            System.err.println("[ERROR] Card is null !");
+            return;
         }
-        if(pile.isEmpty()){
+        super.announce("You have discarded a " + card);
+        this.discardPile.add(card);
+    }
+
+    /**
+     * Handles what happens when the player clicks on the discard pile
+     * Determines if the player wants to discard a card or draw a card
+     */
+    private void discardPileHandler() {
+        if(this.currentPlayer.hasAlreadyDrawn()) {
+            this.discardCard();
+            return;
+        }
+        this.drawFrom(this.discardPile);
+    }
+
+    /**
+     * Handles what happens when the player clicks on the draw pile
+     * And creates a popup that warns the player if he has already drawn a card this turn
+     */
+    private void drawPileHandler() {
+        if(this.currentPlayer.hasAlreadyDrawn()) {
+            super.announce("You have already drawn a card this turn");
+            return;
+        }
+        this.drawFrom(this.drawPile);
+    }
+
+    /**
+     * Draws a card from the specified pile or warns the player that the pile is empty
+     * @param cardPile the pile from which the card will be drawn
+     */
+    private void drawFrom(ArrayDeque<Card> cardPile) {
+        if(cardPile == null){
+            return;
+        }
+        if(cardPile.isEmpty()){
             super.announce("The pile you tried to draw from is empty");
+            return;
         }
         this.currentPlayer.hasDrawn();
-        this.selectedCard = pile.removeLast();
+        super.announce("You have drawn a " + cardPile.peek());
+        cardPile.peek().setAssociatedPlayer(this.currentPlayer);
+        this.currentPlayer.setSelectedCard(cardPile.pop());
+        this.updateGeneralInfoLabel();
+    }
+
+    private void updateGeneralInfoLabel() {
+        super.updateLabel(super.generalInfoLabel, "Current card : " + this.currentPlayer.getSelectedCard());
     }
 
     private void updateInfoLabel() {
-        super.infoLabel.setText("Current player : " + this.currentPlayer.getName());
-        super.repaint();
+        super.updateLabel(super.currentPlayerLabel, "Current player : " + this.currentPlayer.getName());
     }
 }

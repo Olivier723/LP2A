@@ -1,6 +1,8 @@
 package Skyjo_frenic.gui;
 
+import Skyjo_frenic.Game;
 import Skyjo_frenic.basics.Card;
+import Skyjo_frenic.basics.Player;
 
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -8,6 +10,7 @@ import java.awt.event.ComponentEvent;
 
 public class CardButton extends SFCButton{
     private Card associatedCard;
+    private Game associatedGameFrame;
     private static final double GOLDEN_RATIO = 1.61803399F;
     private static final double CARD_TO_SCREEN_RATIO = 0.15F;
     public static final Dimension minimumSize = new Dimension(100, (int) (100 * GOLDEN_RATIO));
@@ -37,8 +40,9 @@ public class CardButton extends SFCButton{
      * @param gbc the constraints of the grid bag layout associated with the card panel
      * @param insets the insets of the grid bag layout
      */
-    public CardButton (int x, int y, SFCPanel cardPanel, GridBagConstraints gbc, Insets insets) {
+    public CardButton (int x, int y, SFCPanel cardPanel, GridBagConstraints gbc, Insets insets, Game game) {
         super(SFCTexture.CARD_BACK);
+        this.associatedGameFrame = game;
         Dimension screenSize = SFCFrame.getScreenSize();
         Dimension cardSize = new Dimension((int) (screenSize.width * CARD_TO_SCREEN_RATIO),
                                            (int) (screenSize.width * CARD_TO_SCREEN_RATIO * GOLDEN_RATIO));
@@ -63,19 +67,36 @@ public class CardButton extends SFCButton{
                 CardButton.super.setPreferredSize(newSize);
             }
         });
+
+        this.associatedCard = null;
     }
 
     /**
      * Handles what should happen when a card is clicked
      */
-    private void onClick() throws NullPointerException {
+    private void onClick() {
         if(associatedCard == null) {
-            System.err.println("Uh oh, the card is null!");
-            throw new NullPointerException("The card is null!");
+            System.err.println("[ERROR] Uh oh, the card is null!");
+        }
+        Player associatedPlayer = associatedCard.getAssociatedPlayer();
+        if(associatedPlayer == null) {
+            System.err.println("[ERROR] How can the card not have an associated player ?");
+            return;
+        }
+
+        //If the player has already drawn a card and has a card selected then set the card clicked to be the selected card and discard the clicked card
+        if(associatedPlayer.hasAlreadyDrawn() && associatedPlayer.getSelectedCard() != null) {
+            associatedGameFrame.discardCard(associatedCard);
+            associatedPlayer.swapCards(associatedCard, associatedPlayer.getSelectedCard());
+            this.associatedCard = associatedPlayer.getSelectedCard();
+            this.associatedCard.reveal();
+            associatedPlayer.setSelectedCard(null);
+            this.setBackgroundImage(associatedCard.getCurrentTexture());
+            return;
         }
         System.out.println("Card clicked " + associatedCard.getValue());
-        if(associatedCard.getAssociatedPlayer().canFlipCard()){
-            associatedCard.flip();
+        if(associatedPlayer.canFlipCard()){
+            this.associatedCard.flip();
             super.setBackgroundImage(associatedCard.getCurrentTexture());
         }
     }

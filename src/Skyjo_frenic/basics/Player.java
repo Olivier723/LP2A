@@ -48,7 +48,19 @@ public class Player {
         return name;
     }
 
+    private Card selectedCard;
+
+    public Card getSelectedCard() {
+        return selectedCard;
+    }
+
+    public void setSelectedCard(Card selectedCard) {
+        this.selectedCard = selectedCard;
+    }
+
     private boolean hasDrawn = false;
+
+    public boolean hasAlreadyDrawn () {return this.hasDrawn;}
 
     public void hasDrawn () {
         this.hasDrawn = true;
@@ -74,7 +86,7 @@ public class Player {
         if(this.turn == 0) {
             return this.cardsFlippedThisTurn < 2;
         }
-        return this.cardsFlippedThisTurn < 1;
+        return this.cardsFlippedThisTurn < 1 && this.hasDrawn && this.selectedCard != null;
     }
 
     public boolean allCardsRevealed() {
@@ -84,6 +96,15 @@ public class Player {
             }
         }
         return true;
+    }
+
+    public void swapCards(Card oldCard,Card newCard) {
+        if(newCard == null || oldCard == null) {
+            return;
+        }
+        int oldCardPos = this.currentHand.indexOf(oldCard);
+        this.currentHand.remove(oldCardPos);
+        this.currentHand.add(oldCardPos,newCard);
     }
 
     public void addCardToHand(Card card) {

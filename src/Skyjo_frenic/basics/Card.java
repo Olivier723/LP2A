@@ -2,6 +2,8 @@ package Skyjo_frenic.basics;
 
 import Skyjo_frenic.gui.SFCTexture;
 
+import java.util.function.Function;
+
 public class Card{
     private final int value;
 
@@ -37,6 +39,10 @@ public class Card{
         this.state = CardState.REVEALED;
     }
 
+    public void hide () {
+        this.state = CardState.HIDDEN;
+    }
+
     public boolean isRevealed() {
         return state == CardState.REVEALED;
     }
@@ -61,6 +67,14 @@ public class Card{
         if(!this.isRevealed() && this.hasAssociatedPlayer()) {
             this.reveal();
             this.associatedPlayer.addPoints(this.value);
+            return;
+        }
+        if(this.isRevealed()){
+            this.hide();
+        }
+    }  public void swapCards(Card otherCard) {
+        if(otherCard == null) {
+            return;
         }
     }
 

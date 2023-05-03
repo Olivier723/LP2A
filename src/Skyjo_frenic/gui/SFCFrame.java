@@ -51,7 +51,9 @@ public class SFCFrame extends JFrame implements SFCComponent {
 
     protected SFCPanel infoPanel;
 
-    protected JLabel infoLabel;
+    protected JLabel currentPlayerLabel;
+
+    protected JLabel generalInfoLabel;
 
     protected SFCPanel popupPanel;
 
@@ -158,19 +160,25 @@ public class SFCFrame extends JFrame implements SFCComponent {
         actionsPanelGBC.gridy = 2;
         discardButton.setMaximumSize(CardButton.maximumSize);
         discardButton.setMinimumSize(CardButton.minimumSize);
-        actionsPanel.add(drawButton, actionsPanelGBC);
+        actionsPanel.add(discardButton, actionsPanelGBC);
 
         /*SFCPanel padding = new SFCPanel(background);
         padding.setPreferredSize(CardButton.cardSize);
         mainPanel.add(padding, BorderLayout.WEST);*/
 
         infoPanel = new SFCPanel();
+        infoPanel.setLayout(new GridLayout(2, 1));
 
-        infoLabel = new JLabel();
-        infoLabel.setForeground(Color.WHITE);
-        infoLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        infoPanel.add(infoLabel);
+        currentPlayerLabel = new JLabel();
+        currentPlayerLabel.setForeground(Color.WHITE);
+        currentPlayerLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        infoPanel.add(currentPlayerLabel);
         mainPanel.add(infoPanel, BorderLayout.WEST);
+
+        generalInfoLabel = new JLabel();
+        generalInfoLabel.setForeground(Color.WHITE);
+        generalInfoLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        infoPanel.add(generalInfoLabel);
 
 
 
@@ -302,30 +310,10 @@ public class SFCFrame extends JFrame implements SFCComponent {
      * Creates a dialog box to confirm quitting the game.
      */
     public void quit() {
-        JDialog dialog = new JDialog(this, "Quit", true);
-        dialog.setLayout(new BorderLayout());
-        dialog.setPreferredSize(new Dimension(250, 100));
-        dialog.setResizable(false);
-        JLabel dialogLabel = new JLabel("Are you sure you want to quit?");
-        dialogLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        dialogLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        dialog.add(dialogLabel, BorderLayout.CENTER);
-        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        SFCButton yesButton = new SFCButton("Yes");
-        yesButton.addActionListener(e -> this.dispose());
-
-        SFCButton noButton = new SFCButton("No");
-        noButton.addActionListener(e -> dialog.dispose());
-
-        SFCPanel buttonPanel = new SFCPanel(background);
-        buttonPanel.setLayout(new GridLayout(1, 2));
-        buttonPanel.add(yesButton);
-        buttonPanel.add(noButton);
-        dialog.add(buttonPanel, BorderLayout.SOUTH);
-        dialog.pack();
-        dialog.setLocationRelativeTo(this);
-        dialog.setVisible(true);
-
+        int answer = JOptionPane.showConfirmDialog(this, "Are you sure you want to quit?", "Quit", JOptionPane.YES_NO_OPTION);
+        if (answer == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }
 
     /**
@@ -334,5 +322,10 @@ public class SFCFrame extends JFrame implements SFCComponent {
      */
     public void announce (String message) {
         JOptionPane.showMessageDialog(this, message);
+    }
+
+    public void updateLabel(JLabel label, String message) {
+        label.setText(message);
+        this.repaint();
     }
 }
