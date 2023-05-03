@@ -72,10 +72,6 @@ public class Card{
         if(this.isRevealed()){
             this.hide();
         }
-    }  public void swapCards(Card otherCard) {
-        if(otherCard == null) {
-            return;
-        }
     }
 
     @Override
