@@ -327,4 +327,12 @@ public class SFCFrame extends JFrame implements SFCComponent {
         dialog.setVisible(true);
 
     }
+
+    /**
+     * Maybe make it so that it uses the info panel instead of JOptionPane
+     * @param message The message to display
+     */
+    public void announce (String message) {
+        JOptionPane.showMessageDialog(this, message);
+    }
 }

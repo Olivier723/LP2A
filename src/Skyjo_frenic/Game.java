@@ -16,10 +16,17 @@ import java.util.ArrayList;
  */
 public class Game extends SFCFrame {
     private final ArrayList<Player> players;
+
+    public Player getLastPlayer () {
+        return this.players.get(players.size()-1);
+    }
+
     private final ArrayDeque<Card> drawPile;
     private final ArrayDeque<Card> discardPile;
     private final ArrayList<CardButton> playerCards;
+    private boolean isStartFinished = false;
     private Player currentPlayer;
+    private Card selectedCard;
     private static final int MAX_CARD_AMOUNT = 108;
     public static final int MAX_CARDS_PER_HAND = 12;
 
@@ -34,6 +41,7 @@ public class Game extends SFCFrame {
         super.getCancelButton().addActionListener(e -> removePlayerHandler());
         super.nameInput.addActionListener(e -> nameInputHandler());
         this.currentPlayer = null;
+        this.selectedCard = null;
         this.updatePlayerList();
     }
 
@@ -71,15 +79,7 @@ public class Game extends SFCFrame {
         return "There currently is no players in the game !";
     }
 
-    /**
-     * Tests if the given name respects these rules :
-     * Only alphanumeric characters TODO (For now)
-     * @param name The name given by the player
-     * @return True if the name is valid given the above rules, false otherwise
-     */
-    private boolean isNameValid (String name) {
-        return name != null && name.matches("^[a-zA-Z0-9]+$");
-    }
+
 
     /**
      * Looks for the given name in the players list
@@ -102,7 +102,7 @@ public class Game extends SFCFrame {
         ArrayDeque<Card> deck = new ArrayDeque<>(MAX_CARD_AMOUNT);
         for (int i = 0; i < MAX_CARD_AMOUNT; ++i) {
             deck.add(new Card((int) (Math.random() * MAX_CARD_AMOUNT),
-                              SFCTexture.CARD_BACK, SFCTexture.GUIG, null));
+                              SFCTexture.CARD_BACK, SFCTexture.GUIG));
         }
         return deck;
     }
@@ -114,10 +114,10 @@ public class Game extends SFCFrame {
         super.popupPanel.SFCHide();
         super.infoPanelGBC.gridy = 0;
         super.infoPanelGBC.gridx = 0;
-        super.popupPanelContainer.add(cardPanel, super.infoPanelGBC);
-        super.nextPlayerButton.addActionListener(e -> changeCurrentPlayer());
-        actionsPanelGBC.gridy = 1;
-        super.actionsPanel.add(super.nextPlayerButton, actionsPanelGBC);
+        super.popupPanelContainer.add(super.cardPanel, super.infoPanelGBC);
+        super.nextPlayerButton.addActionListener(e -> this.changeCurrentPlayer());
+        super.actionsPanelGBC.gridy = 1;
+        super.actionsPanel.add(super.nextPlayerButton, super.actionsPanelGBC);
     }
 
     /**
@@ -138,7 +138,7 @@ public class Game extends SFCFrame {
         }
 
         //Now that the cards are distributed, we can associate the first player's cards to the buttons
-        this.associateCurrentPlayerToCardButtons();
+        this.linkCurrentPlayerToCardButtons();
         this.updateInfoLabel();
 
         super.cardPanel.SFCShow();
@@ -152,7 +152,7 @@ public class Game extends SFCFrame {
         return players.get(this.currentPlayer.getPlayerNumber() % this.players.size());
     }
 
-    private void associateCurrentPlayerToCardButtons() {
+    private void linkCurrentPlayerToCardButtons () {
         for(int i = 0; i < MAX_CARDS_PER_HAND; ++i) {
             CardButton temp = this.playerCards.get(i);
             temp.setAssociatedCard(this.currentPlayer.getCurrentHand().get(i));
@@ -175,21 +175,34 @@ public class Game extends SFCFrame {
     }
 
     /**
-     * Changes the current player and associates the card buttons on screen to the current player's hand
-     * Also makes sure that the player can switch player before going to the next player
+     * This function is the logic behind the player switching system
+     * It checks if the player has done everything necessary
+     * and then set the currentPlayer to the next player in the list
      */
     private void changeCurrentPlayer() {
+        // We first check if the player is able to finish his turn
         if(currentPlayer.canSwitchPlayer()) {
             this.currentPlayer.addTurn();
-            this.currentPlayer = this.getNextPlayer();
+
+            // If the last player has finished the first turn, we can set the starting player
+            if (!this.isStartFinished && getLastPlayer().getTurn() == 1) {
+                this.isStartFinished = true;
+                this.setStartingPlayer();
+                super.announce("The game has started !\n" + this.currentPlayer.getName() + " will start the game !");
+                super.drawButton.addActionListener(e -> drawFrom(this.drawPile));
+                super.discardButton.addActionListener(e -> discardCard());
+
+            }
+            //Otherwise, we just switch players normally
+            else {
+                this.currentPlayer = this.getNextPlayer();
+            }
+
             this.updateInfoLabel();
-            System.out.println("Current player : " + currentPlayer + " , score : " + currentPlayer.getPoints());
-            this.associateCurrentPlayerToCardButtons();
+            this.linkCurrentPlayerToCardButtons();
             return;
         }
-        if(currentPlayer.getTurn() == 0){
-            System.out.println("You must flip two cards before switching player !");
-        }
+        super.announce("You must flip two cards before switching player !");
     }
 
     /**
@@ -212,12 +225,12 @@ public class Game extends SFCFrame {
      */
     private void nameInputHandler () {
         String name = super.nameInput.getText();
-        if (!isNameValid(name)) {
+        if (!Player.isNameValid(name)) {
             super.prompt.setText("Only alphanumeric characters are allowed !");
             return;
         }
 
-        if (isNameAlreadyUsed(name)) {
+        if (this.isNameAlreadyUsed(name)) {
             super.prompt.setText("This name is already in use !");
             return;
         }
@@ -255,12 +268,20 @@ public class Game extends SFCFrame {
         super.repaint();
     }
 
+    private void discardCard() {
+        this.discardPile.add(this.selectedCard);
+    }
 
-    private Card drawCard() {
-        if(drawPile.isEmpty()) {
-            //TODO : shuffle the discard pile into the draw pile
+
+    private void drawFrom(ArrayDeque<Card> pile) throws NullPointerException {
+        if(pile == null){
+            throw new NullPointerException("The given pile is null");
         }
-        return drawPile.removeLast();
+        if(pile.isEmpty()){
+            super.announce("The pile you tried to draw from is empty");
+        }
+        this.currentPlayer.hasDrawn();
+        this.selectedCard = pile.removeLast();
     }
 
     private void updateInfoLabel() {

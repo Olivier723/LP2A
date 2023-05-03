@@ -45,11 +45,11 @@ public class Card{
         return this.associatedPlayer != null;
     }
 
-    public Card (int value, SFCTexture backTexture, SFCTexture frontTexture, Player associatedPlayer){
+    public Card (int value, SFCTexture backTexture, SFCTexture frontTexture){
         this.value = value;
         this.backTexture = backTexture;
         this.frontTexture = frontTexture;
-        this.associatedPlayer = associatedPlayer;
+        this.associatedPlayer = null;
     }
 
     /**

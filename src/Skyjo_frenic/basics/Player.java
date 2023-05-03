@@ -26,6 +26,7 @@ public class Player {
 
     public void addTurn() {
         this.cardsFlippedThisTurn = 0;
+        this.hasDrawn = false;
         ++this.turn;
     }
 
@@ -41,11 +42,17 @@ public class Player {
         return currentHand;
     }
 
+    private final String name;
+
     public String getName() {
         return name;
     }
 
-    private final String name;
+    private boolean hasDrawn = false;
+
+    public void hasDrawn () {
+        this.hasDrawn = true;
+    }
 
     public Player (String name, int playerNumber) {
         this.name = name;
@@ -59,10 +66,7 @@ public class Player {
         if(this.turn == 0) {
             return this.cardsFlippedThisTurn == 2;
         }
-        if(this.cardsFlippedThisTurn == 1){
-            return true;
-        }
-        return false;
+        return this.hasDrawn;
 
     }
 
@@ -89,5 +93,15 @@ public class Player {
     @Override
     public String toString () {
         return this.name;
+    }
+
+    /**
+     * Tests if the given name respects these rules :
+     * Only alphanumeric characters TODO (For now)
+     * @param name The name given by the player
+     * @return True if the name is valid given the above rules, false otherwise
+     */
+    public static boolean isNameValid (String name) {
+        return name != null && name.matches("^[a-zA-Z0-9]+$");
     }
 }
