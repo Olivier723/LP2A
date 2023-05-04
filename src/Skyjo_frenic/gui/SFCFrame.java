@@ -2,12 +2,13 @@ package Skyjo_frenic.gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
 
+/**
+ * Hides some of the ugly code of the GUI behind a simpler interface.
+ */
 public class SFCFrame extends JFrame implements SFCComponent {
     public final Dimension screenSize;
     private final SFCTexture background;
@@ -114,8 +115,6 @@ public class SFCFrame extends JFrame implements SFCComponent {
     }
 
     /**
-     * TODO : Change how the game handles the player initiation menu.
-     * Refer to gui_proto.png for more information.
      */
     private void createUIComponents () {
         mainPanel = new SFCPanel(background);
@@ -187,7 +186,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
     }
 
     /**
-     * Creates the player input menu and also win menu. (Hopefully)
+     * Creates the player input menu and also win menu.
      */
     private SFCPanel createPopupPanel () {
 
@@ -301,8 +300,6 @@ public class SFCFrame extends JFrame implements SFCComponent {
         });
         menu.add(aboutItem);
         menuBar.add(menu);
-
-
         return menuBar;
     }
 
@@ -317,7 +314,6 @@ public class SFCFrame extends JFrame implements SFCComponent {
     }
 
     /**
-     * Maybe make it so that it uses the info panel instead of JOptionPane
      * @param message The message to display
      */
     public void announce (String message) {

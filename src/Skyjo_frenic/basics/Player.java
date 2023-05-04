@@ -26,7 +26,6 @@ public class Player {
 
     public void addTurn() {
         this.cardsFlippedThisTurn = 0;
-        this.hasDrawn = false;
         ++this.turn;
     }
 
@@ -38,8 +37,8 @@ public class Player {
 
     private final ArrayList<Card> currentHand;
 
-    public ArrayList<Card> getCurrentHand() {
-        return currentHand;
+    public Card getCard(int index) {
+        return this.currentHand.get(index);
     }
 
     private final String name;
@@ -48,23 +47,19 @@ public class Player {
         return name;
     }
 
-    private Card selectedCard;
+    /**
+     * If this is null, it means that the player has not drawn a card yet
+     */
+    private Card drawnCard;
 
-    public Card getSelectedCard() {
-        return selectedCard;
+    public Card getDrawnCard () {
+        return drawnCard;
     }
 
-    public void setSelectedCard(Card selectedCard) {
-        this.selectedCard = selectedCard;
+    public void setDrawnCard (Card drawnCard) {
+        this.drawnCard = drawnCard;
     }
-
-    private boolean hasDrawn = false;
-
-    public boolean hasAlreadyDrawn () {return this.hasDrawn;}
-
-    public void hasDrawn () {
-        this.hasDrawn = true;
-    }
+    public boolean hasAlreadyDrawn () {return this.drawnCard != null ;}
 
     public Player (String name, int playerNumber) {
         this.name = name;
@@ -78,17 +73,25 @@ public class Player {
         if(this.turn == 0) {
             return this.cardsFlippedThisTurn == 2;
         }
-        return this.hasDrawn;
-
+        return this.hasAlreadyDrawn();
     }
 
+    /**
+     * Determines if the player is able to flip a card
+     * Used for the
+     * @return True if the player can flip a card, false otherwise
+     */
     public boolean canFlipCard() {
         if(this.turn == 0) {
             return this.cardsFlippedThisTurn < 2;
         }
-        return this.cardsFlippedThisTurn < 1 && this.hasDrawn && this.selectedCard != null;
+        return this.cardsFlippedThisTurn < 1 && this.hasAlreadyDrawn() && this.drawnCard != null;
     }
 
+    /**
+     * Tests if all cards in the player's hand are revealed for the win condition
+     * @return True if all cards are revealed, false otherwise
+     */
     public boolean allCardsRevealed() {
         for(Card card : this.currentHand) {
             if(!card.isRevealed()) {
@@ -100,6 +103,7 @@ public class Player {
 
     public void swapCards(Card oldCard,Card newCard) {
         if(newCard == null || oldCard == null) {
+            System.err.println("[ERROR] Swapping cards requires both cards to be non-null!");
             return;
         }
         int oldCardPos = this.currentHand.indexOf(oldCard);
@@ -118,7 +122,7 @@ public class Player {
 
     /**
      * Tests if the given name respects these rules :
-     * Only alphanumeric characters TODO (For now)
+     * Only alphanumeric characters are allowed
      * @param name The name given by the player
      * @return True if the name is valid given the above rules, false otherwise
      */

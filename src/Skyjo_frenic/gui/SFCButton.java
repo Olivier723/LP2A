@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+/**
+ *
+ */
 public class SFCButton extends JButton implements EasyBackgroundImage, SFCComponent {
     private Image img;
 

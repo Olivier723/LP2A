@@ -8,16 +8,25 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+/**
+ * This class is just an SFCButton with a card associated with it
+ * As such it does handle the click event and the necessary verifications.
+ * Also handles how the card is rendered and resized
+ */
 public class CardButton extends SFCButton{
     private Card associatedCard;
-    private Game associatedGameFrame;
+
+    /**
+     * The game instance that created this button
+     */
+    private final Game associatedGameFrame;
+
+    // Constants related to the size of the button
     private static final double GOLDEN_RATIO = 1.61803399F;
     private static final double CARD_TO_SCREEN_RATIO = 0.15F;
     public static final Dimension minimumSize = new Dimension(100, (int) (100 * GOLDEN_RATIO));
     public static final Dimension maximumSize = new Dimension(400, (int) (400 * GOLDEN_RATIO));
-    public Card getAssociatedCard () {
-        return associatedCard;
-    }
+
 
     /**
      * Sets the associated card and adds an action listener to the button
@@ -73,24 +82,26 @@ public class CardButton extends SFCButton{
 
     /**
      * Handles what should happen when a card is clicked
+     * If either the associated card or the associated player of this card is null does nothing but print an error
+     * Otherwise, if the player drew from the draw pile and then clicks a button, the card is swapped with the drawn card
      */
     private void onClick() {
         if(associatedCard == null) {
-            System.err.println("[ERROR] Uh oh, the card is null!");
+            System.err.println("[ERROR] Uh oh, this button refers to nothing card");
+            return;
         }
         Player associatedPlayer = associatedCard.getAssociatedPlayer();
         if(associatedPlayer == null) {
             System.err.println("[ERROR] How can the card not have an associated player ?");
             return;
         }
-
         //If the player has already drawn a card and has a card selected then set the card clicked to be the selected card and discard the clicked card
-        if(associatedPlayer.hasAlreadyDrawn() && associatedPlayer.getSelectedCard() != null) {
+        if(associatedPlayer.hasAlreadyDrawn() && associatedPlayer.getDrawnCard() != null) {
             associatedGameFrame.discardCard(associatedCard);
-            associatedPlayer.swapCards(associatedCard, associatedPlayer.getSelectedCard());
-            this.associatedCard = associatedPlayer.getSelectedCard();
+            associatedPlayer.swapCards(associatedCard, associatedPlayer.getDrawnCard());
+            this.associatedCard = associatedPlayer.getDrawnCard();
+            associatedPlayer.setDrawnCard(null);
             this.associatedCard.reveal();
-            associatedPlayer.setSelectedCard(null);
             this.setBackgroundImage(associatedCard.getCurrentTexture());
             return;
         }
@@ -110,4 +121,5 @@ public class CardButton extends SFCButton{
             super.repaint();
         }
     }
+
 }

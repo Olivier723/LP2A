@@ -2,8 +2,10 @@ package Skyjo_frenic.basics;
 
 import Skyjo_frenic.gui.SFCTexture;
 
-import java.util.function.Function;
-
+/**
+ * Represents a card in the game with a value and two textures (one for the front and one for the back)
+ * A player object is associated with the card to make adding the score easier
+ */
 public class Card{
     private final int value;
 
@@ -28,6 +30,10 @@ public class Card{
         return this.isRevealed() ? frontTexture : backTexture;
     }
 
+    /**
+     * Enum used to represent the state of the card
+     * Could also have a boolean though
+     */
     private enum CardState {
         REVEALED,
         HIDDEN
@@ -59,8 +65,8 @@ public class Card{
     }
 
     /**
-     * Handles the click on a card :
-     *  - Adds the value of the card to the player's count if the card is being revealed
+     * Handles the player's interaction with the card :
+     *  - Adds the value of the card to the player's count if the card is being revealed while also revealing the card
      *  -
      */
     public void flip() {

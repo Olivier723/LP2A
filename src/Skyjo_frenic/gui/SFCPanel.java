@@ -2,10 +2,10 @@ package Skyjo_frenic.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import Skyjo_frenic.Game;
 
 /*
  * Extends the JPanel class to allow for a background image to be set easily.
- *
  *
  */
 public class SFCPanel extends JPanel implements EasyBackgroundImage, SFCComponent {
@@ -18,7 +18,7 @@ public class SFCPanel extends JPanel implements EasyBackgroundImage, SFCComponen
 
     public SFCPanel () {
         this.img = null;
-        this.setBackground(new Color(0, 0, 0, 0));
+        this.setBackground(Game.TRANSPARENT);
     }
 
     public void setBackgroundImage (SFCTexture SFCTexture) {

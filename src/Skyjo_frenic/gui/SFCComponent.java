@@ -1,8 +1,7 @@
 package Skyjo_frenic.gui;
 
 /**
- * Add QoL improvements to the GUI elements
- * Might not be useful...
+ * Adds a way for SFCComponents to be hidden and deactivated or shown and enabled easily
  */
 interface SFCComponent {
     void SFCHide ();
