@@ -93,6 +93,12 @@ public class SFCFrame extends JFrame implements SFCComponent {
 
     protected SFCFrame (String title, int w, int h) {
         this.screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        if(w > 0 && h > 0 && w < screenSize.width && h < screenSize.height) {
+            this.setSize(w, h);
+        } else {
+            this.setSize(screenSize);
+        }
+
         this.setLNF();
         this.setTitle(title);
         this.setSize(w, h);
@@ -107,9 +113,9 @@ public class SFCFrame extends JFrame implements SFCComponent {
         });
 
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        int x = (int) ((screenSize.getWidth() - w) / 2);
-        int y = (int) ((screenSize.getHeight() - h) / 2);
-        this.setLocation(x, y);
+        int middleScreenX = (int) ((screenSize.getWidth() - w) / 2);
+        int middleScreenY = (int) ((screenSize.getHeight() - h) / 2);
+        this.setLocation(middleScreenX, middleScreenY);
         this.background = SFCTexture.MAT_TEXTURE;
         this.createUIComponents();
     }

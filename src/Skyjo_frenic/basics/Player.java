@@ -1,7 +1,5 @@
 package Skyjo_frenic.basics;
 
-import Skyjo_frenic.Game;
-
 import java.util.ArrayList;
 
 public class Player {

@@ -1,10 +1,7 @@
-package Skyjo_frenic;
+package Skyjo_frenic.basics;
 
-import Skyjo_frenic.basics.CSVReader;
 import Skyjo_frenic.gui.CardButton;
 import Skyjo_frenic.gui.SFCFrame;
-import Skyjo_frenic.basics.Card;
-import Skyjo_frenic.basics.Player;
 import Skyjo_frenic.gui.SFCTexture;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,21 +18,27 @@ import java.util.Iterator;
 public class Game extends SFCFrame {
     // Global constants
     public static final Color TRANSPARENT = new Color(0, 0, 0, 0);
-    private static final int MAX_CARD_AMOUNT = 108;
-    public static final int MAX_CARDS_PER_HAND = 12;
-
     /**
      * A simple class to represent a pile of cards while making sure cards are never null
      * This class uses a deque because we only need to add and remove cards from the top of the pile
      * So there's no need to use a list
      */
+    private static final int MAX_POINTS = 1000;
+    private static final int MAX_CARD_AMOUNT = 108;
+    public static final int MAX_CARDS_PER_HAND = 12;
+
     private static class SFCCardPile implements Iterable<Card> {
         private final ArrayDeque<Card> cardPile;
+
 
         public SFCCardPile () {
             this.cardPile = new ArrayDeque<>(MAX_CARD_AMOUNT);
         }
 
+        /**
+         * Only inserts the card if it's not null
+         * @param card the card to add to the pile
+         */
         public void addCard (Card card) {
             if(card != null) {
                 this.cardPile.add(card);
@@ -53,13 +56,12 @@ public class Game extends SFCFrame {
         public Card peek () {
             return this.cardPile.peek();
         }
-
         @Override
         public @NotNull Iterator<Card> iterator () {
             return this.cardPile.iterator();
         }
-    }
 
+    }
     private final ArrayList<Player> players;
     public Player getLastPlayer () {
         return this.players.get(players.size()-1);
@@ -69,6 +71,7 @@ public class Game extends SFCFrame {
     private final ArrayList<CardButton> playerCards;
     private boolean isStartFinished = false;
     private Player currentPlayer;
+
 
     public Game() {
         super("Skyjo_frenic", 800, 400);
@@ -221,11 +224,21 @@ public class Game extends SFCFrame {
     }
 
     /**
+     * Checks if the current player has won just before changing players
+     */
+    private void checkIfWin() {
+        if(this.currentPlayer.allCardsRevealed() || this.currentPlayer.getPoints() >= MAX_POINTS){
+            super.announce(this.currentPlayer.getName() + " has won the game !");
+        }
+    }
+
+    /**
      * This function is the logic behind the player switching system
      * It checks if the player has done everything necessary
      * and then set the currentPlayer to the next player in the list
      */
     private void changeCurrentPlayer() {
+        this.checkIfWin();
         // We first check if the player is able to finish his turn
         if(currentPlayer.canSwitchPlayer()) {
             this.currentPlayer.addTurn();

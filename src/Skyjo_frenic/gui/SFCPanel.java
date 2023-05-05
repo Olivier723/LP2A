@@ -2,7 +2,7 @@ package Skyjo_frenic.gui;
 
 import javax.swing.*;
 import java.awt.*;
-import Skyjo_frenic.Game;
+import Skyjo_frenic.basics.Game;
 
 /*
  * Extends the JPanel class to allow for a background image to be set easily.
