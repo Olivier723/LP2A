@@ -1,6 +1,6 @@
 package Skyjo_frenic.gui;
 
-import Skyjo_frenic.Game;
+import Skyjo_frenic.basics.Game;
 import Skyjo_frenic.basics.Card;
 import Skyjo_frenic.basics.Player;
 
@@ -64,14 +64,15 @@ public class CardButton extends SFCButton{
      */
     private void onClick() {
         if(associatedCard == null) {
-            System.err.println("[ERROR] Uh oh, this button refers to nothing card");
+            System.err.println("[ERROR] Uh oh, this button refers to nothing");
             return;
         }
-        Player associatedPlayer = associatedCard.getAssociatedPlayer();
-        if(associatedPlayer == null) {
+        if(!associatedCard.hasAssociatedPlayer()) {
             System.err.println("[ERROR] How can the card not have an associated player ?");
             return;
         }
+
+        Player associatedPlayer = associatedCard.getAssociatedPlayer();
         //If the player has already drawn a card and has a card selected then set the card clicked to be the selected card and discard the clicked card
         if(associatedPlayer.hasAlreadyDrawn() && associatedPlayer.getDrawnCard() != null) {
             associatedGameFrame.discardCard(associatedCard);
@@ -97,5 +98,4 @@ public class CardButton extends SFCButton{
             super.repaint();
         }
     }
-
 }
