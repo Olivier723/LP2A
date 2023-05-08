@@ -1,10 +1,7 @@
-package Skyjo_frenic;
+package Skyjo_frenic.basics;
 
-import Skyjo_frenic.basics.CSVReader;
 import Skyjo_frenic.gui.CardButton;
 import Skyjo_frenic.gui.SFCFrame;
-import Skyjo_frenic.basics.Card;
-import Skyjo_frenic.basics.Player;
 import Skyjo_frenic.gui.SFCTexture;
 import org.jetbrains.annotations.NotNull;
 
