@@ -21,7 +21,6 @@ import java.util.Iterator;
 public class Game extends SFCFrame {
     // Global constants
     public static final Color TRANSPARENT = new Color(0, 0, 0, 0);
-    private static final int MAX_CARD_AMOUNT = 108;
     public static final int MAX_CARDS_PER_HAND = 12;
 
     /**
@@ -33,7 +32,7 @@ public class Game extends SFCFrame {
         private final ArrayDeque<Card> cardPile;
 
         public SFCCardPile () {
-            this.cardPile = new ArrayDeque<>(MAX_CARD_AMOUNT);
+            this.cardPile = new ArrayDeque<>();
         }
 
         public void addCard (Card card) {
@@ -43,7 +42,7 @@ public class Game extends SFCFrame {
         }
 
         public Card drawCard () {
-            return this.cardPile.pop();
+            return this.cardPile.removeLast();
         }
 
         public boolean isEmpty () {
@@ -91,10 +90,9 @@ public class Game extends SFCFrame {
      */
     private ArrayList<CardButton> createPlayerCards() {
         ArrayList<CardButton> playerCards = new ArrayList<>(MAX_CARDS_PER_HAND);
-        GridBagConstraints cardgbc = new GridBagConstraints();
-        Insets insets = new Insets(10, 10, 10, 10);
         for(int i = 0; i < MAX_CARDS_PER_HAND; i++) {
-            playerCards.add(new CardButton(i%4, i/4, cardPanel, cardgbc, insets, this));
+            CardButton newCardButton = new CardButton(super.cardPanel, this);
+            playerCards.add(newCardButton);
         }
         return playerCards;
     }
@@ -103,7 +101,6 @@ public class Game extends SFCFrame {
      *
      */
     public void begin() {
-        var cardData = CSVReader.readCSV("/home/Olivier/Documents/Code/Java/LP2A/resources/data/Lol.csv");
         super.SFCShow();
     }
 
@@ -143,9 +140,17 @@ public class Game extends SFCFrame {
      */
     private SFCCardPile generateDeck () {
         SFCCardPile deck = new SFCCardPile();
-        for (int i = 0; i < MAX_CARD_AMOUNT; ++i) {
-            deck.addCard(new Card((int) (Math.random() * MAX_CARD_AMOUNT),
-                              SFCTexture.CARD_BACK, SFCTexture.GUIG));
+
+        var cardData = CSVReader.readCSV("resources/data/Cards.csv");
+        for (final var card : cardData) {
+            int cardAmount = Integer.parseInt(card.get(2));
+            for(int i = 0; i < cardAmount; i++){
+                String textureName = card.get(0).split("\\.")[0];
+                System.out.println(textureName);
+                SFCTexture texture =  SFCTexture.getTexture(textureName);
+                int cardPoints = Integer.parseInt(card.get(1));
+                deck.addCard(new Card(cardPoints, SFCTexture.CARD_BACK, texture, textureName));
+            }
         }
         return deck;
     }
@@ -341,6 +346,7 @@ public class Game extends SFCFrame {
         super.announce("You have discarded a " + this.currentPlayer.getDrawnCard());
         this.discardPile.addCard(this.currentPlayer.getDrawnCard());
         this.currentPlayer.setDrawnCard(null);
+        this.updateGeneralInfoLabel();
     }
 
     /**

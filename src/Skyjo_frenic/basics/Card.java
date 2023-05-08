@@ -9,6 +9,8 @@ import Skyjo_frenic.gui.SFCTexture;
 public class Card{
     private final int value;
 
+    private final String name;
+
     public int getValue() {
         return value;
     }
@@ -57,11 +59,12 @@ public class Card{
         return this.associatedPlayer != null;
     }
 
-    public Card (int value, SFCTexture backTexture, SFCTexture frontTexture){
+    public Card (int value, SFCTexture backTexture, SFCTexture frontTexture, String name){
         this.value = value;
         this.backTexture = backTexture;
         this.frontTexture = frontTexture;
         this.associatedPlayer = null;
+        this.name = name;
     }
 
     /**
@@ -82,6 +85,6 @@ public class Card{
 
     @Override
     public String toString () {
-        return String.valueOf(this.value);
+        return this.name;
     }
 }

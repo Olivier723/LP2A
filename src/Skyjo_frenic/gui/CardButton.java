@@ -42,42 +42,19 @@ public class CardButton extends SFCButton{
     }
 
     /**
-     *
-     * @param x the x position of the button in the grid of cards
-     * @param y the y position of the button in the grid of cards
      * @param cardPanel the panel representing the grid of cards
-     * @param gbc the constraints of the grid bag layout associated with the card panel
-     * @param insets the insets of the grid bag layout
+     * @param game the game instance that created this button
      */
-    public CardButton (int x, int y, SFCPanel cardPanel, GridBagConstraints gbc, Insets insets, Game game) {
+    public CardButton (SFCPanel cardPanel, Game game) {
         super(SFCTexture.CARD_BACK);
+        this.associatedCard = null;
         this.associatedGameFrame = game;
         Dimension screenSize = SFCFrame.getScreenSize();
         Dimension cardSize = new Dimension((int) (screenSize.width * CARD_TO_SCREEN_RATIO),
                                            (int) (screenSize.width * CARD_TO_SCREEN_RATIO * GOLDEN_RATIO));
-        super.setPreferredSize(cardSize);
-        gbc.gridx = x;
-        gbc.gridy = y;
-        gbc.insets = insets;
-        gbc.weightx = 1;
-        cardPanel.add(this);
-
-        //adds listener to handle how the card is resized
-        this.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized (ComponentEvent e) {
-                super.componentResized(e);
-                Dimension newSize;
-                newSize = e.getComponent().getSize();
-                if(newSize.width > 192) {
-                    newSize.width = 192;
-                }
-                newSize.height = (int) (newSize.width * GOLDEN_RATIO);
-                CardButton.super.setPreferredSize(newSize);
-            }
-        });
-
         this.associatedCard = null;
+        super.setPreferredSize(cardSize);
+        cardPanel.add(this);
     }
 
     /**
@@ -105,7 +82,6 @@ public class CardButton extends SFCButton{
             this.setBackgroundImage(associatedCard.getCurrentTexture());
             return;
         }
-        System.out.println("Card clicked " + associatedCard.getValue());
         if(associatedPlayer.canFlipCard()){
             this.associatedCard.flip();
             super.setBackgroundImage(associatedCard.getCurrentTexture());

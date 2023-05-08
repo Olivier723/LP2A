@@ -2,6 +2,8 @@ package Skyjo_frenic.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
@@ -133,15 +135,15 @@ public class SFCFrame extends JFrame implements SFCComponent {
         nextPlayerButton = new SFCButton("Next Player");
         nextPlayerButton.setPreferredSize(buttonSize);
 
-        cardPanel = new SFCPanel(SFCTexture.GUIG);
-        /*GridBagLayout cardLayout = new GridBagLayout();*/
-        GridLayout cardLayout = new GridLayout(3, 4);
+        cardPanel = new SFCPanel();
         cardPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        cardPanel.setLayout(cardLayout);
         cardPanel.setMaximumSize(new Dimension(700,700 ));
-
-        cardPanel.setMinimumSize(new Dimension(700, 700));
         cardPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        cardPanel.setMinimumSize(new Dimension(800, 900));
+        GridLayout cardLayout = new GridLayout(3, 4);
+        cardLayout.setVgap(5);
+        cardLayout.setHgap(5);
+        cardPanel.setLayout(cardLayout);
 
         actionsPanel = new SFCPanel();
         actionsPanel.setLayout(new GridBagLayout());
@@ -190,10 +192,10 @@ public class SFCFrame extends JFrame implements SFCComponent {
      */
     private SFCPanel createPopupPanel () {
 
-        popupPanelContainer = new SFCPanel(SFCTexture.CARD_BACK);
+        popupPanelContainer = new SFCPanel();
         popupPanelContainer.setLayout(new GridBagLayout());
 
-        popupPanel = new SFCPanel(SFCTexture.GUIG);
+        popupPanel = new SFCPanel();
         popupPanel.setPreferredSize(maxInfoPanelSize);
         popupPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
         infoPanelGBC = new GridBagConstraints();
