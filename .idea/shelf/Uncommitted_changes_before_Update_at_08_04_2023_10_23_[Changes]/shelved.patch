@@ -1,0 +1,27 @@
+Index: src/Skyjo/Game.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package Skyjo;\n\nimport java.util.ArrayList;\n\npublic class Game extends GameFrame{\n    private final ArrayList<Player> players;\n    private final ArrayList<Card> drawPile;\n    private final ArrayList<Card> discardPile;\n    private GameState state;\n\n    public Game() {\n        super(\"Skyjo\", 500, 250);\n        this.players = new ArrayList<>();\n        this.state = GameState.INIT;\n        this.drawPile = new ArrayList<>();\n        this.discardPile = new ArrayList<>();\n        super.getTitleLabel().setText(\"Choose between 2 and 8 player names.\");\n        super.getPrompt().setText(\"Enter a nickname : \");\n        super.getButton().addActionListener(e -> eventHandler());\n        super.getTextField1().addActionListener(e -> eventHandler());\n    }\n\n    public void start() {\n        super.setVisible(true);\n    }\n\n    @Override\n    public String toString () {\n        StringBuilder s = new StringBuilder(\"The game has \" + players.size() + \" players :\\n\");\n        for(final var player : players) {\n            s.append(\"\\t- \").append(player).append(\"\\n\");\n        }\n        return s.toString();\n    }\n\n    private boolean isNameValid (String name) {\n        return name.matches(\"^[a-zA-Z0-9]+$\");\n    }\n\n    private boolean isNameAlreadyUsed(String name) {\n        for(final var player : players){\n            if(player.getName().equals(name))\n                return true;\n        }\n        return false;\n    }\n\n    private void eventHandler () {\n        switch (this.state) {\n            case INIT -> {\n                String name = super.getTextField1().getText();\n                if (isNameValid(name)) {\n                    if (isNameAlreadyUsed(name)) {\n                        super.getPrompt().setText(\"This name is already used. Please enter another one.\");\n                    } else {\n                        if(players.size() >= 8) {\n                            super.getPrompt().setText(\"Cannot add more players, please start the game.\");\n                        } else {\n                            players.add(new Player(name));\n                            super.getPrompt().setText(\"Please enter the name of the next player.\");\n                        }\n                        super.getCurrentPlayers().setText(this.toString());\n                    }\n                } else {\n                    super.getPrompt().setText(\"Invalid name. Please enter a name without special characters.\");\n                }\n            }\n        }\n    }\n}\n
+===================================================================
+diff --git a/src/Skyjo/Game.java b/src/Skyjo/Game.java
+--- a/src/Skyjo/Game.java	
++++ b/src/Skyjo/Game.java	
+@@ -37,6 +37,7 @@
+         return name.matches("^[a-zA-Z0-9]+$");
+     }
+ 
++
+     private boolean isNameAlreadyUsed(String name) {
+         for(final var player : players){
+             if(player.getName().equals(name))
+@@ -45,6 +46,10 @@
+         return false;
+     }
+ 
++    /*
++     * Handles all the event tied to user interaction with the Game window depending on the state of the game
++     *
++     * */
+     private void eventHandler () {
+         switch (this.state) {
+             case INIT -> {

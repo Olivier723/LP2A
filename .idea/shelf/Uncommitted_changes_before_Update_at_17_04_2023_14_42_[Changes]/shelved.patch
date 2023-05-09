@@ -1,0 +1,34 @@
+Index: src/HalfLife3/Game.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package HalfLife3;\n\nimport HalfLife3.gui.HF3Frame;\nimport HalfLife3.basics.Card;\nimport HalfLife3.basics.GameState;\nimport HalfLife3.basics.Player;\n\nimport java.util.ArrayList;\n\npublic class Game extends HF3Frame {\n    private final ArrayList<Player> players;\n    private final ArrayList<Card> drawPile;\n    private final ArrayList<Card> discardPile;\n    private final int MAX_CARD_AMOUNT = 108;\n    private int turn;\n    private GameState state;\n\n    public Game() {\n        super(\"HalfLife3\", 500, 250);\n        this.players = new ArrayList<>();\n        this.state = GameState.INIT;\n        this.drawPile = new ArrayList<>(108);\n        this.discardPile = new ArrayList<>(108);\n        super.getTitleLabel().setText(\"Choose between 2 and 8 player names.\");\n        super.getPrompt().setText(\"Enter a nickname : \");\n        super.getButton().addActionListener(e -> eventHandler());\n        super.getTextField1().addActionListener(e -> eventHandler());\n        this.turn = 0;\n    }\n\n    public void start() {\n        super.setVisible(true);\n    }\n\n    @Override\n    public String toString () {\n        StringBuilder s = new StringBuilder(\"The game has \" + players.size() + \" players :\\n\");\n        for(final var player : players) {\n            s.append(\"\\t- \").append(player).append(\"\\n\");\n        }\n        return s.toString();\n    }\n\n    private boolean isNameValid (String name) {\n        return name.matches(\"^[a-zA-Z0-9]+$\");\n    }\n\n    private boolean isNameAlreadyUsed(String name) {\n        for(final var player : players){\n            if(player.getName().equals(name))\n                return true;\n        }\n        return false;\n    }\n\n    private void initDrawPile() {\n        for(int i = 0; i < MAX_CARD_AMOUNT; i++) {\n            //TODO\n        }\n    }\n\n    private void eventHandler () {\n        switch (this.state) {\n            case INIT -> {\n                String name = super.getTextField1().getText();\n                if (isNameValid(name)) {\n                    if (isNameAlreadyUsed(name)) {\n                        super.getPrompt().setText(\"This name is already used. Please enter another one.\");\n                    } else {\n                        if(players.size() >= 8) {\n                            super.getPrompt().setText(\"Cannot add more players, please start the game.\");\n                        } else {\n                            players.add(new Player(name));\n                            super.getPrompt().setText(\"Please enter the name of the next player.\");\n                        }\n                        super.getPlayerList().setText(this.toString());\n                    }\n                } else {\n                    super.getPrompt().setText(\"Invalid name. Please enter a name without special characters.\");\n                }\n            }\n\n            case PLAYING -> {\n                for(final var player : players){\n\n                }\n                turn++;\n            }\n        }\n    }\n}\n
+===================================================================
+diff --git a/src/HalfLife3/Game.java b/src/HalfLife3/Game.java
+--- a/src/HalfLife3/Game.java	
++++ b/src/HalfLife3/Game.java	
+@@ -28,7 +28,7 @@
+         this.turn = 0;
+     }
+ 
+-    public void start() {
++    public void init() {
+         super.setVisible(true);
+     }
+ 
+Index: src/HalfLife3/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package HalfLife3;\n\n\npublic class Main\n{\n    public static void main (String[] args) {\n        Game game = new Game();\n        game.start();\n    }\n}\n
+===================================================================
+diff --git a/src/HalfLife3/Main.java b/src/HalfLife3/Main.java
+--- a/src/HalfLife3/Main.java	
++++ b/src/HalfLife3/Main.java	
+@@ -5,6 +5,7 @@
+ {
+     public static void main (String[] args) {
+         Game game = new Game();
+-        game.start();
++        game.init();
++        /*game.start();*/
+     }
+ }
