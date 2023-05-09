@@ -12,8 +12,9 @@ import java.util.HashMap;
 public class CSVReader {
 
     /**
-     * Reads a CSV file and returns a HashMap with the keys being the first line of the CSV file and the values being a list containing the values of the respective column.
+     * Reads the content of the CSV file at the given path and returns it as an list containing the data of each card
      * @param filePath the path to the CSV file
+     * @throws IllegalArgumentException if the path is null or the file is not a CSV file
      * @return a HashMap representing the CSV file
      */
     public static ArrayList<ArrayList<String>> readCSV (String filePath) throws IllegalArgumentException {
@@ -25,9 +26,8 @@ public class CSVReader {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             br.readLine();
             String line;
-            String[] data;
             while ((line = br.readLine()) != null) {
-                data = line.split(",");
+                String[] data = line.split(",");
                 cardDataList.add(new ArrayList<>(Arrays.asList(data)));
             }
         }catch (IOException e) {
