@@ -143,8 +143,8 @@ public class Game extends SFCFrame {
             int cardAmount = Integer.parseInt(card.get(2));
             for(int i = 0; i < cardAmount; i++){
                 String textureName = card.get(0).split("\\.")[0];
-                System.out.println(textureName);
                 SFCTexture texture =  SFCTexture.getTexture(textureName);
+                System.out.println(texture);
                 int cardPoints = Integer.parseInt(card.get(1));
                 deck.addCard(new Card(cardPoints, SFCTexture.CARD_BACK, texture, textureName));
             }

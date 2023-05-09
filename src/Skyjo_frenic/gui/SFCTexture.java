@@ -11,10 +11,10 @@ public enum SFCTexture {
     MAT_TEXTURE("resources/textures/mat_background.png", "mat_background"),
 
     // -2 points
-    DEBT_2(),
+    DEBT2(),
 
     // -1 points
-    DEBT_1(),
+    DEBT1(),
 
     // 0 points
     VALIDATION(),

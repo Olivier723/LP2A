@@ -202,6 +202,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
         popupPanelContainer.setLayout(new GridBagLayout());
 
         popupPanel = new SFCPanel();
+        popupPanel.setBackground(new Color(0x55FFFFFF, true));
         popupPanel.setPreferredSize(maxInfoPanelSize);
         popupPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
         infoPanelGBC = new GridBagConstraints();
@@ -221,7 +222,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
         infoPanelGBC.gridy = InputMenuPos.TITLE.y;
         popupPanel.add(titleLabel, infoPanelGBC);
 
-        SFCPanel inputPanel = new SFCPanel(background);
+        SFCPanel inputPanel = new SFCPanel();
         inputPanel.setLayout(new GridLayout(1, 2));
         inputPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         inputPanel.setPreferredSize(new Dimension(450, 25));
@@ -238,7 +239,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
         nameInput.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         inputPanel.add(nameInput);
 
-        buttonPanel = new SFCPanel(background);
+        buttonPanel = new SFCPanel();
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         infoPanelGBC.gridy = InputMenuPos.BUTTON_MENU.y;
         popupPanel.add(buttonPanel, infoPanelGBC);
