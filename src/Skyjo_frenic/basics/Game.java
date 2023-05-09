@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 /**
@@ -139,6 +140,8 @@ public class Game extends SFCFrame {
         SFCCardPile deck = new SFCCardPile();
 
         var cardData = CSVReader.readCSV("resources/data/Cards.csv");
+        Collections.shuffle(cardData);
+        int cardCount = cardData.size();
         for (final var card : cardData) {
             int cardAmount = Integer.parseInt(card.get(2));
             for(int i = 0; i < cardAmount; i++){
@@ -232,6 +235,7 @@ public class Game extends SFCFrame {
         if(currentPlayer.canSwitchPlayer()) {
             this.currentPlayer.addTurn();
 
+            this.currentPlayer.setDrawnCard(null);
             // If the last player has finished the first turn, we can set the starting player
             if (!this.isStartFinished && this.getLastPlayer().getTurn() == 1) {
                 this.isStartFinished = true;
@@ -241,13 +245,13 @@ public class Game extends SFCFrame {
                 super.discardButton.addActionListener(e -> discardPileHandler());
 
             }
+
             //Otherwise, we just switch players normally
             else {
                 this.currentPlayer = this.getNextPlayer();
             }
 
             this.relinkCardButtons();
-            
             this.updateInfoLabel();
             if(this.isStartFinished) {
                 this.updateGeneralInfoLabel();
@@ -337,8 +341,10 @@ public class Game extends SFCFrame {
             return;
         }
         if(this.currentPlayer.getDrawnCard() == null) {
+            super.announce("You have no card to discard !");
             return;
         }
+
         this.currentPlayer.getDrawnCard().setAssociatedPlayer(null);
         super.announce("You have discarded a " + this.currentPlayer.getDrawnCard());
         this.discardPile.addCard(this.currentPlayer.getDrawnCard());
@@ -399,13 +405,14 @@ public class Game extends SFCFrame {
         if (cardPile.peek() == null) {
             return;
         }
-        super.announce("You have drawn a " + cardPile.peek());
-        cardPile.peek().setAssociatedPlayer(this.currentPlayer);
-        this.currentPlayer.setDrawnCard(cardPile.drawCard());
+        Card drawnCard = cardPile.drawCard();
+        super.announce("You have drawn a " + drawnCard);
+        drawnCard.setAssociatedPlayer(this.currentPlayer);
+        this.currentPlayer.setDrawnCard(drawnCard);
         this.updateGeneralInfoLabel();
     }
 
-    private void updateGeneralInfoLabel() {
+    public void updateGeneralInfoLabel() {
         String message;
         if(this.currentPlayer.getDrawnCard() == null) {
             message = "You have no card in hand";

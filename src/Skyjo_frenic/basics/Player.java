@@ -24,6 +24,7 @@ public class Player {
 
     public void addTurn() {
         this.cardsFlippedThisTurn = 0;
+        this.hasDrawn = false;
         ++this.turn;
     }
 
@@ -45,10 +46,9 @@ public class Player {
         return name;
     }
 
-    /**
-     * If this is null, it means that the player has not drawn a card yet
-     */
     private Card drawnCard;
+
+    private boolean hasDrawn = false;
 
     public Card getDrawnCard () {
         return drawnCard;
@@ -56,8 +56,13 @@ public class Player {
 
     public void setDrawnCard (Card drawnCard) {
         this.drawnCard = drawnCard;
+        if(drawnCard != null) {
+            this.hasDrawn = true;
+        }
     }
-    public boolean hasAlreadyDrawn () {return this.drawnCard != null ;}
+
+
+    public boolean hasAlreadyDrawn () {return this.hasDrawn;}
 
     public Player (String name, int playerNumber) {
         this.name = name;

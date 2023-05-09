@@ -73,13 +73,15 @@ public class CardButton extends SFCButton{
         }
 
         Player associatedPlayer = associatedCard.getAssociatedPlayer();
+
         //If the player has already drawn a card and has a card selected then set the card clicked to be the selected card and discard the clicked card
         if(associatedPlayer.hasAlreadyDrawn() && associatedPlayer.getDrawnCard() != null) {
             associatedGameFrame.discardCard(associatedCard);
             associatedPlayer.swapCards(associatedCard, associatedPlayer.getDrawnCard());
             this.associatedCard = associatedPlayer.getDrawnCard();
-            associatedPlayer.setDrawnCard(null);
             this.associatedCard.reveal();
+            this.associatedCard.getAssociatedPlayer().setDrawnCard(null);
+            associatedGameFrame.updateGeneralInfoLabel();
             this.setBackgroundImage(associatedCard.getCurrentTexture());
             return;
         }
