@@ -58,7 +58,8 @@ public class CardButton extends SFCButton{
     /**
      * Handles what should happen when a card is clicked
      * If either the associated card or the associated player of this card is null does nothing but print an error
-     * Otherwise, if the player drew from the draw pile and then clicks a button, the card is swapped with the drawn card
+     * Otherwise, if the player drew from the draw pile and then clicks a button, the card is swapped with the drawn card,
+     * the card that was clicked is discarded and adds the value of the card that was drawn to the associatedPlayer's score
      */
     private void onClick() {
         if(associatedCard == null) {
@@ -74,18 +75,34 @@ public class CardButton extends SFCButton{
 
         //If the player has already drawn a card and has a card selected then set the card clicked to be the selected card and discard the clicked card
         if(associatedPlayer.hasAlreadyDrawn() && associatedPlayer.getDrawnCard() != null) {
+            //First discard the card that was clicked
             parentGame.discardCard(associatedCard);
+
+            // If the card is revealed, remove the points from the player's score before swapping the cards
+            if(associatedCard.isRevealed()){
+                associatedPlayer.addPoints(-associatedCard.getValue());
+            }
             associatedPlayer.swapCards(associatedCard, associatedPlayer.getDrawnCard());
+
+            // Then set this button's associated card to be the drawn card and reveal it
             this.associatedCard = associatedPlayer.getDrawnCard();
             this.associatedCard.reveal();
+
+            //Then get rid of the drawn card in the player "inventory
             this.associatedCard.getAssociatedPlayer().setDrawnCard(null);
+
+            associatedPlayer.addPoints(this.associatedCard.getValue());
             parentGame.updateGeneralInfoLabel();
+            parentGame.updateTotalPointsLabel();
             this.setBackgroundImage(associatedCard.getCurrentTexture());
             return;
         }
+
+
         if(associatedPlayer.canFlipCard()){
             this.associatedCard.flip();
             super.setBackgroundImage(associatedCard.getCurrentTexture());
+            parentGame.updateTotalPointsLabel();
         }
     }
 

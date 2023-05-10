@@ -53,7 +53,7 @@ public class Game extends SFCFrame {
         }
 
         @Override
-        public @NotNull Iterator<Card> iterator () {
+        public Iterator<Card> iterator () {
             return this.cardPile.iterator();
         }
     }
@@ -62,6 +62,7 @@ public class Game extends SFCFrame {
     public Player getLastPlayer () {
         return this.players.get(players.size()-1);
     }
+    private int winningTurn;
     private final SFCCardPile drawPile;
     private final SFCCardPile discardPile;
     private final ArrayList<CardButton> playerCards;
@@ -69,7 +70,7 @@ public class Game extends SFCFrame {
     private Player currentPlayer;
 
     public Game() {
-        super("Skyjo_frenic", 800, 400);
+        super("Skyjo_frenic", 1200, 800);
         this.players = new ArrayList<>();
         this.drawPile = generateDeck();
         super.setIconImage(SFCTexture.CARD_BACK.getImage());
@@ -147,7 +148,7 @@ public class Game extends SFCFrame {
             for(int i = 0; i < cardAmount; i++){
                 String textureName = card.get(0).split("\\.")[0];
                 SFCTexture texture =  SFCTexture.getTexture(textureName);
-                System.out.println(texture);
+
                 int cardPoints = Integer.parseInt(card.get(1));
                 deck.addCard(new Card(cardPoints, SFCTexture.CARD_BACK, texture, textureName));
             }
@@ -160,12 +161,15 @@ public class Game extends SFCFrame {
      */
     private void setPlayingUI() {
         super.popupPanel.SFCHide();
+        super.actionsPanel.add(super.drawPanel, super.actionsPanelGBC);
+        super.actionsPanelGBC.gridy = 1;
+        super.actionsPanel.add(super.nextPlayerButton, super.actionsPanelGBC);
+        super.actionsPanelGBC.gridy = 2;
+        super.actionsPanel.add(super.discardPanel, super.actionsPanelGBC);
         super.infoPanelGBC.gridy = 0;
         super.infoPanelGBC.gridx = 0;
         super.popupPanelContainer.add(super.cardPanel, super.infoPanelGBC);
         super.nextPlayerButton.addActionListener(e -> this.changeCurrentPlayer());
-        super.actionsPanelGBC.gridy = 1;
-        super.actionsPanel.add(super.nextPlayerButton, super.actionsPanelGBC);
     }
 
     /**
@@ -225,24 +229,32 @@ public class Game extends SFCFrame {
         }
     }
 
-    private boolean currentPlayerHasWon() {
-        return currentPlayer.getPoints() >= MAX_POINTS_ALLOWED;
+    /**
+     * Determines if the current player has finished the game, meaning that he either has more than
+     * {@link #MAX_POINTS_ALLOWED} points or has revealed all his cards
+     * @return True if the current player has finished the game, false otherwise
+     */
+    private boolean hasCurrentPlayerFinished() {
+        return currentPlayer.getPoints() >= MAX_POINTS_ALLOWED || currentPlayer.allCardsRevealed();
     }
 
     /**
      * This function is the logic behind the player switching system
+     * First, it checks if the player has finished the game, ie he has more than {@link #MAX_POINTS_ALLOWED} points or has revealed all his cards
      * It checks if the player has done everything necessary
      * and then set the currentPlayer to the next player in the list
      */
     private void changeCurrentPlayer() {
         // We first check if the player is able to finish his turn
-        if(this.currentPlayerHasWon()){
-            super.announce(currentPlayer + " has won the game !");
+        if(this.hasCurrentPlayerFinished()){
+            this.winningTurn = this.currentPlayer.getTurn();
         }
         if(currentPlayer.canSwitchPlayer()) {
             this.currentPlayer.addTurn();
 
             this.currentPlayer.setDrawnCard(null);
+
+
             // If the last player has finished the first turn, we can set the starting player
             if (!this.isStartFinished && this.getLastPlayer().getTurn() == 1) {
                 this.isStartFinished = true;
@@ -259,16 +271,19 @@ public class Game extends SFCFrame {
             }
 
             this.relinkCardButtons();
+            this.updateTotalPointsLabel();
             this.updateInfoLabel();
             if(this.isStartFinished) {
                 this.updateGeneralInfoLabel();
             }
             return;
         }
+
         if (this.currentPlayer.getTurn() == 0) {
             super.announce("You must flip two cards before switching player !");
             return;
         }
+
         super.announce("You must discard or draw a card before switching player !");
     }
 
@@ -329,14 +344,6 @@ public class Game extends SFCFrame {
     }
 
     /**
-     * Updates the player list on the info screen
-     */
-    private void updatePlayerList () {
-        this.playerList.setText(this.toString());
-        super.repaint();
-    }
-
-    /**
      * <h4>This method is used exclusively by this class only if the player wants to discard the card he just drew</h4>
      * Discards a player's selected card if he has one
      * and then sets his selected card to null while also de-referencing the card's associated player
@@ -355,6 +362,8 @@ public class Game extends SFCFrame {
         this.currentPlayer.getDrawnCard().setAssociatedPlayer(null);
         super.announce("You have discarded a " + this.currentPlayer.getDrawnCard());
         this.discardPile.addCard(this.currentPlayer.getDrawnCard());
+        super.discardButton.setBackgroundImage(this.currentPlayer.getDrawnCard().getFrontTexture());
+        super.discardButton.repaint();
         this.currentPlayer.setDrawnCard(null);
         this.updateGeneralInfoLabel();
     }
@@ -371,6 +380,8 @@ public class Game extends SFCFrame {
         }
         super.announce("You have discarded a " + card);
         this.discardPile.addCard(card);
+        super.discardButton.setBackgroundImage(card.getCurrentTexture());
+        super.discardButton.repaint();
     }
 
     /**
@@ -419,6 +430,10 @@ public class Game extends SFCFrame {
         this.updateGeneralInfoLabel();
     }
 
+    /**
+     * Shows the card held by the current player
+     * or "You have no card in hand" if the player has none
+     */
     public void updateGeneralInfoLabel() {
         String message;
         if(this.currentPlayer.getDrawnCard() == null) {
@@ -429,7 +444,25 @@ public class Game extends SFCFrame {
         super.updateLabel(super.generalInfoLabel, message );
     }
 
+    /**
+     * Updates the current player label on the screen
+     */
     private void updateInfoLabel() {
-        super.updateLabel(super.currentPlayerLabel, "Current player : " + this.currentPlayer.getName());
+        super.updateLabel(super.currentPlayerLabel, "Current player :\n " + this.currentPlayer.getName());
+    }
+
+    /**
+     * Updates the player list on the info screen
+     */
+    private void updatePlayerList () {
+        this.playerList.setText(this.toString());
+        super.repaint();
+    }
+
+    /**
+     * Updates the total points label on the info screen
+     */
+    public void updateTotalPointsLabel() {
+        super.updateLabel(super.totalPointsLabel, "Total points :\n " + this.currentPlayer.getPoints());
     }
 }

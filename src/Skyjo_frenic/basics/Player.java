@@ -81,14 +81,14 @@ public class Player {
 
     /**
      * Determines if the player is able to flip a card
-     * Used for the
+     * Only during the first turn or if he discarded the card he drew can the player flip a card without drawing another one first
      * @return True if the player can flip a card, false otherwise
      */
     public boolean canFlipCard() {
         if(this.turn == 0) {
             return this.cardsFlippedThisTurn < 2;
         }
-        return this.cardsFlippedThisTurn < 1 && this.hasAlreadyDrawn() && this.drawnCard != null;
+        return this.cardsFlippedThisTurn < 1 && this.hasAlreadyDrawn();
     }
 
     /**
@@ -104,7 +104,7 @@ public class Player {
         return true;
     }
 
-    public void swapCards(Card oldCard,Card newCard) {
+    public void swapCards(Card oldCard, Card newCard) {
         if(newCard == null || oldCard == null) {
             System.err.println("[ERROR] Swapping cards requires both cards to be non-null!");
             return;

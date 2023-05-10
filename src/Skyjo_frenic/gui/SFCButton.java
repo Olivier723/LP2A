@@ -1,9 +1,9 @@
 package Skyjo_frenic.gui;
 
+import Skyjo_frenic.basics.Game;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 /**
  *
@@ -25,11 +25,10 @@ public class SFCButton extends JButton implements EasyBackgroundImage, SFCCompon
         this.img = sfcTexture.getImage();
     }
 
-    public SFCButton (String text, SFCTexture sfcTexture) {
-        super(text);
+    public SFCButton () {
         super.setAlignmentX(Component.CENTER_ALIGNMENT);
         super.setAlignmentY(Component.CENTER_ALIGNMENT);
-        this.img = sfcTexture.getImage();
+        super.setBackground(Game.TRANSPARENT);
     }
 
     public void setBackgroundImage (SFCTexture sfcTexture) {

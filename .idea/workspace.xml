@@ -4,9 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="113fa787-f6bc-468d-9d39-a2f2a305c185" name="Changes" comment="Added textures">
+    <list default="true" id="113fa787-f6bc-468d-9d39-a2f2a305c185" name="Changes" comment="Fixed some bugs">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_03_05_2023_18_11_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_03_05_2023_18_11__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Card.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/CardButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/CardButton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCButton.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCFrame.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -103,6 +109,7 @@
       <workItem from="1683706019598" duration="254000" />
       <workItem from="1683706395172" duration="69000" />
       <workItem from="1683715125572" duration="1679000" />
+      <workItem from="1683751778672" duration="2993000" />
     </task>
     <task id="LOCAL-00001" summary="Yee">
       <created>1680340374047</created>

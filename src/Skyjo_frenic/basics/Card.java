@@ -9,11 +9,11 @@ import Skyjo_frenic.gui.SFCTexture;
 public class Card{
     private final int value;
 
-    private final String name;
-
-    public int getValue() {
+    public int getValue () {
         return value;
     }
+
+    private final String name;
 
     private Player associatedPlayer;
 
@@ -26,6 +26,10 @@ public class Card{
     }
 
     private final SFCTexture frontTexture;
+
+    public SFCTexture getFrontTexture () {
+        return frontTexture;
+    }
     private final SFCTexture backTexture;
 
     public SFCTexture getCurrentTexture () {
@@ -69,17 +73,13 @@ public class Card{
 
     /**
      * Handles the player's interaction with the card :
-     *  - Adds the value of the card to the player's count if the card is being revealed while also revealing the card
-     *  -
+     * Adds the value of the card to the player's count if the card is being revealed while also revealing the card.
+     *
      */
     public void flip() {
         if(!this.isRevealed() && this.hasAssociatedPlayer()) {
             this.reveal();
             this.associatedPlayer.addPoints(this.value);
-            return;
-        }
-        if(this.isRevealed()){
-            this.hide();
         }
     }
 
