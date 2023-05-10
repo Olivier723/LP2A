@@ -5,8 +5,6 @@ import Skyjo_frenic.basics.Card;
 import Skyjo_frenic.basics.Player;
 
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 /**
  * This class is just an SFCButton with a card associated with it
@@ -19,7 +17,7 @@ public class CardButton extends SFCButton{
     /**
      * The game instance that created this button
      */
-    private final Game associatedGameFrame;
+    private final Game parentGame;
 
     // Constants related to the size of the button
     private static final double GOLDEN_RATIO = 1.61803399F;
@@ -48,7 +46,7 @@ public class CardButton extends SFCButton{
     public CardButton (SFCPanel cardPanel, Game game) {
         super(SFCTexture.CARD_BACK);
         this.associatedCard = null;
-        this.associatedGameFrame = game;
+        this.parentGame = game;
         Dimension screenSize = SFCFrame.getScreenSize();
         Dimension cardSize = new Dimension((int) (screenSize.width * CARD_TO_SCREEN_RATIO),
                                            (int) (screenSize.width * CARD_TO_SCREEN_RATIO * GOLDEN_RATIO));
@@ -76,12 +74,12 @@ public class CardButton extends SFCButton{
 
         //If the player has already drawn a card and has a card selected then set the card clicked to be the selected card and discard the clicked card
         if(associatedPlayer.hasAlreadyDrawn() && associatedPlayer.getDrawnCard() != null) {
-            associatedGameFrame.discardCard(associatedCard);
+            parentGame.discardCard(associatedCard);
             associatedPlayer.swapCards(associatedCard, associatedPlayer.getDrawnCard());
             this.associatedCard = associatedPlayer.getDrawnCard();
             this.associatedCard.reveal();
             this.associatedCard.getAssociatedPlayer().setDrawnCard(null);
-            associatedGameFrame.updateGeneralInfoLabel();
+            parentGame.updateGeneralInfoLabel();
             this.setBackgroundImage(associatedCard.getCurrentTexture());
             return;
         }
