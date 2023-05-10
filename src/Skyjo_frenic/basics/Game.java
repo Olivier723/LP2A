@@ -20,6 +20,7 @@ public class Game extends SFCFrame {
     // Global constants
     public static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     public static final int MAX_CARDS_PER_HAND = 12;
+    public static final int MAX_POINTS_ALLOWED = 60;
 
     /**
      * A simple class to represent a pile of cards while making sure cards are never null
@@ -141,7 +142,6 @@ public class Game extends SFCFrame {
 
         var cardData = CSVReader.readCSV("resources/data/Cards.csv");
         Collections.shuffle(cardData);
-        int cardCount = cardData.size();
         for (final var card : cardData) {
             int cardAmount = Integer.parseInt(card.get(2));
             for(int i = 0; i < cardAmount; i++){
@@ -225,6 +225,10 @@ public class Game extends SFCFrame {
         }
     }
 
+    private boolean currentPlayerHasWon() {
+        return currentPlayer.getPoints() >= MAX_POINTS_ALLOWED;
+    }
+
     /**
      * This function is the logic behind the player switching system
      * It checks if the player has done everything necessary
@@ -232,6 +236,9 @@ public class Game extends SFCFrame {
      */
     private void changeCurrentPlayer() {
         // We first check if the player is able to finish his turn
+        if(this.currentPlayerHasWon()){
+            super.announce(currentPlayer + " has won the game !");
+        }
         if(currentPlayer.canSwitchPlayer()) {
             this.currentPlayer.addTurn();
 
@@ -318,7 +325,7 @@ public class Game extends SFCFrame {
 
         //If all the above tests failed then it means that the game is full
         super.announce("Cannot add more players, please start the game.");
-        super.popupPanel.remove(super.buttonPanel);
+        super.popupPanel.remove(super.getOkButton());
     }
 
     /**

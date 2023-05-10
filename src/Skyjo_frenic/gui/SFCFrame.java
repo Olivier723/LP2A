@@ -2,8 +2,6 @@ package Skyjo_frenic.gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
@@ -104,7 +102,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
         this.setLNF();
         this.setTitle(title);
         this.setSize(w, h);
-        this.setMinimumSize(new Dimension(800, 600));
+        this.setMinimumSize(new Dimension(1200, 800));
 
         // Makes it so that the program asks if the user wants to quit before closing.
         this.addWindowListener(new WindowAdapter() {
@@ -126,15 +124,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
      */
     private void createUIComponents () {
         mainPanel = new SFCPanel(background);
-        /*mainPanel.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized (ComponentEvent e) {
-                super.componentResized(e);
-                Dimension size = mainPanel.getSize();
-                Dimension newSize = new Dimension(size.width - 20, size.height - 20);
-                infoPanel.setPreferredSize(newSize);
-            }
-        });*/
+
         mainPanel.setLayout(new BorderLayout());
         this.add(mainPanel);
 
@@ -153,6 +143,8 @@ public class SFCFrame extends JFrame implements SFCComponent {
 
         actionsPanel = new SFCPanel();
         actionsPanel.setLayout(new GridBagLayout());
+        actionsPanel.setMaximumSize(CardButton.maximumSize);
+        actionsPanel.setMinimumSize(CardButton.minimumSize);
         actionsPanelGBC = new GridBagConstraints();
         mainPanel.add(actionsPanel, BorderLayout.EAST);
 
@@ -169,11 +161,9 @@ public class SFCFrame extends JFrame implements SFCComponent {
         discardButton.setMinimumSize(CardButton.minimumSize);
         actionsPanel.add(discardButton, actionsPanelGBC);
 
-        /*SFCPanel padding = new SFCPanel(background);
-        padding.setPreferredSize(CardButton.cardSize);
-        mainPanel.add(padding, BorderLayout.WEST);*/
-
         infoPanel = new SFCPanel();
+        infoPanel.setMinimumSize(CardButton.minimumSize);
+        infoPanel.setMaximumSize(CardButton.maximumSize);
         infoPanel.setLayout(new GridLayout(2, 1));
 
         currentPlayerLabel = new JLabel();
@@ -204,7 +194,6 @@ public class SFCFrame extends JFrame implements SFCComponent {
         popupPanel = new SFCPanel();
         popupPanel.setBackground(new Color(0x55FFFFFF, true));
         popupPanel.setPreferredSize(maxInfoPanelSize);
-        popupPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
         infoPanelGBC = new GridBagConstraints();
         infoPanelGBC.weightx = 1;
         infoPanelGBC.weighty = 1;
@@ -219,6 +208,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
         JLabel titleLabel = new JLabel("Choose between 2 and 8 player names.");
         titleLabel.setFont(new Font("Arial", Font.BOLD , 20));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setForeground(Color.BLACK);
         infoPanelGBC.gridy = InputMenuPos.TITLE.y;
         popupPanel.add(titleLabel, infoPanelGBC);
 
@@ -268,6 +258,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
         playerList = new JTextPane();
         playerList.setFont(new Font("Arial", Font.PLAIN, 14));
         playerList.setEditable(false);
+        playerList.setForeground(Color.BLACK);
         playerList.setBackground(new Color(0, 0, 0, 0));
         infoPanelGBC.gridy = InputMenuPos.PLAYER_LIST.y;
         popupPanel.add(playerList, infoPanelGBC);
