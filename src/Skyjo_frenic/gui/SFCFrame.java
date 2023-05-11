@@ -1,5 +1,7 @@
 package Skyjo_frenic.gui;
 
+import Skyjo_frenic.basics.Game;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -29,25 +31,51 @@ public class SFCFrame extends JFrame implements SFCComponent {
     private final static Dimension buttonSize = new Dimension(100, 25);
     private static final Dimension drawButtonSize = new Dimension(150, 220);
 
+    private final static Font defaultFont = new Font("Arial", Font.PLAIN, 20);
+    private final static Font titleFont = new Font("Arial", Font.BOLD, 40);
+    private final static Font smallFont = new Font("Arial", Font.BOLD, 14);
 
-    protected JLabel prompt;
+    /**
+     * The panel containing the whole game
+     */
+    protected SFCPanel mainPanel;
 
+    /**
+     * Container of the {@link #popupPanel} to center it on the screen
+     */
+    protected SFCPanel popupPanelContainer;
+
+    /**
+     * The panel that asks the player for their name
+     * (Originally thought to be used like a popup instead of the {@link #announce} method , but could not be used due to time constraints)
+     */
+    protected SFCPanel popupPanel;
+
+    /**
+     * This label is what prompts the player to enter their name
+     */
+    protected JLabel nameInputPrompt;
+
+    /**
+     * This is where the player enters their name
+     */
     protected JTextField nameInput;
 
+    /**
+     * The panel containing the ok and cancel buttons
+     */
+    protected SFCPanel buttonPanel;
     private SFCButton okButton;
-
     public SFCButton getOkButton () {
         return okButton;
     }
 
     private SFCButton cancelButton;
-
     public SFCButton getCancelButton () {
         return cancelButton;
     }
 
     private SFCButton launchButton;
-
     public SFCButton getLaunchButton () {
         return launchButton;
     }
@@ -58,11 +86,32 @@ public class SFCFrame extends JFrame implements SFCComponent {
      */
     protected JTextPane playerList;
 
+
     /**
      * The label situated on the left that displays the current player's name and the card they're holding
      */
     protected SFCPanel infoPanel;
 
+    /**
+     * Shows the current player's points count
+     */
+    protected JLabel totalPointsLabel;
+
+    /**
+     * Contains the info about the card that the player is holding
+     * i.e. it's name and texture
+     */
+    protected SFCPanel heldCardPanel;
+
+    /**
+     * Shows the card that the current player is holding
+     */
+    protected JLabel heldCardName;
+
+    /**
+     * The texture associated with the card name in {@link #heldCardName}
+     */
+    protected SFCPanel heldCardTexture;
 
     /**
      * Shows the name of the current player
@@ -71,34 +120,10 @@ public class SFCFrame extends JFrame implements SFCComponent {
 
 
     /**
-     * Shows the card that the current player is holding
-     */
-    protected JLabel generalInfoLabel;
-
-    /**
-     * The panel that asks the player for their name
-     * (Originally thought to be used like a popup instead of the {@link #announce} method , but could not be used due to time constraints)
-     */
-    protected SFCPanel popupPanel;
-
-    protected SFCPanel popupPanelContainer;
-
-    /**
-     * The panel containing the whole game
-     */
-    protected SFCPanel mainPanel;
-
-    /**
      * The panel in the center of the screen containing the {@link CardButton}s
      */
     protected SFCPanel cardPanel;
 
-    /**
-     * The panel containing the ok and cancel buttons
-     */
-    protected SFCPanel buttonPanel;
-
-    protected SFCButton nextPlayerButton;
 
     /**
      * The panel on the right containing the draw, discard and actions panels
@@ -110,13 +135,17 @@ public class SFCFrame extends JFrame implements SFCComponent {
     protected SFCButton drawButton;
 
     /**
+     * The button that allows the player to end their turn
+     */
+    protected SFCButton nextPlayerButton;
+
+    /**
      * The panel containing the discard button
      */
     protected SFCPanel discardPanel;
 
     protected SFCButton discardButton;
 
-    protected JLabel totalPointsLabel;
 
     // Constraints used to place the components in the panels
     protected GridBagConstraints infoPanelGBC;
@@ -137,7 +166,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
     }
 
     protected SFCFrame (String title, int w, int h) {
-        this.screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        this.screenSize = SFCFrame.getScreenSize();
         if(w > 0 && h > 0 && w < screenSize.width && h < screenSize.height) {
             this.setSize(w, h);
         } else {
@@ -192,7 +221,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
         drawPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         JLabel drawLabel = new JLabel("Draw pile :");
         drawLabel.setForeground(Color.BLACK);
-        drawLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        drawLabel.setFont(defaultFont);
         drawPanel.add(drawLabel, drawPanelGBC);
         drawPanelGBC.gridy = 1;
         drawButton = new SFCButton();
@@ -206,7 +235,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
         discardLabel.setForeground(Color.BLACK);
         discardLabel.setBackground(new Color(255, 255, 255, 25));
         drawPanelGBC.gridy = 0;
-        discardLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        discardLabel.setFont(defaultFont);
         discardPanel.add(discardLabel, drawPanelGBC);
         drawPanelGBC.gridy = 1;
         discardButton = new SFCButton();
@@ -219,23 +248,37 @@ public class SFCFrame extends JFrame implements SFCComponent {
         infoPanel.setMinimumSize(CardButton.minimumSize);
         infoPanel.setMaximumSize(CardButton.maximumSize);
         infoPanel.setLayout(new GridLayout(2, 1));
+        mainPanel.add(infoPanel, BorderLayout.WEST);
 
         currentPlayerLabel = new JLabel();
         currentPlayerLabel.setForeground(Color.WHITE);
-        currentPlayerLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        currentPlayerLabel.setFont(titleFont);
         currentPlayerLabel.setHorizontalAlignment(SwingConstants.CENTER);
         mainPanel.add(currentPlayerLabel, BorderLayout.NORTH);
-        mainPanel.add(infoPanel, BorderLayout.WEST);
 
         totalPointsLabel = new JLabel();
-        totalPointsLabel.setForeground(Color.WHITE);
-        totalPointsLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        totalPointsLabel.setForeground(Color.BLACK);
+        totalPointsLabel.setFont(defaultFont);
         infoPanel.add(totalPointsLabel);
 
-        generalInfoLabel = new JLabel();
-        generalInfoLabel.setForeground(Color.WHITE);
-        generalInfoLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        infoPanel.add(generalInfoLabel);
+        heldCardPanel = new SFCPanel();
+        heldCardPanel.setLayout(new GridBagLayout());
+        GridBagConstraints currentCardGBC = new GridBagConstraints();
+        currentCardGBC.gridx = 0;
+        currentCardGBC.gridy = 0;
+        currentCardGBC.weightx = 1;
+
+        heldCardName = new JLabel();
+        heldCardName.setForeground(Color.BLACK);
+        heldCardName.setFont(defaultFont);
+        heldCardPanel.add(heldCardName, currentCardGBC);
+
+        currentCardGBC.gridy = 1;
+        heldCardTexture = new SFCPanel();
+        heldCardTexture.setPreferredSize(drawButtonSize);
+        heldCardPanel.add(heldCardTexture, currentCardGBC);
+
+        infoPanel.add(heldCardPanel);
     }
 
     /**
@@ -288,7 +331,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
         popupPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JLabel titleLabel = new JLabel("Choose between 2 and 8 player names.");
-        titleLabel.setFont(new Font("Arial", Font.BOLD , 20));
+        titleLabel.setFont(defaultFont);
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         titleLabel.setForeground(Color.BLACK);
         infoPanelGBC.gridy = InputMenuPos.TITLE.y;
@@ -301,11 +344,11 @@ public class SFCFrame extends JFrame implements SFCComponent {
         infoPanelGBC.gridy = InputMenuPos.NAME_INPUT.y;
         popupPanel.add(inputPanel, infoPanelGBC);
 
-        prompt = new JLabel("Enter a nickname : ");
-        prompt.setBackground(Color.WHITE);
-        prompt.setFont(new Font("Arial", Font.BOLD, 14));
-        prompt.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 5));
-        inputPanel.add(prompt);
+        nameInputPrompt = new JLabel("Enter a nickname : ");
+        nameInputPrompt.setForeground(Color.BLACK);
+        nameInputPrompt.setFont(smallFont);
+        nameInputPrompt.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 5));
+        inputPanel.add(nameInputPrompt);
 
         nameInput = new JTextField();
         nameInput.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -336,12 +379,15 @@ public class SFCFrame extends JFrame implements SFCComponent {
         launchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         launchButton.setMaximumSize(buttonSize);
         launchButton.setAlignmentY(Component.CENTER_ALIGNMENT);
+        infoPanelGBC.gridy = InputMenuPos.LAUNCH_BUTTON.y;
+        popupPanel.add(launchButton, infoPanelGBC);
+        launchButton.SFCHide();
 
         playerList = new JTextPane();
-        playerList.setFont(new Font("Arial", Font.PLAIN, 14));
+        playerList.setFont(smallFont);
         playerList.setEditable(false);
         playerList.setForeground(Color.BLACK);
-        playerList.setBackground(new Color(0, 0, 0, 0));
+        playerList.setBackground(Game.TRANSPARENT);
         infoPanelGBC.gridy = InputMenuPos.PLAYER_LIST.y;
         popupPanel.add(playerList, infoPanelGBC);
         return popupPanelContainer;
@@ -366,7 +412,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
 
     private MenuBar createMenuBar() {
         MenuBar menuBar = new MenuBar();
-        menuBar.setFont(new Font("Arial", Font.BOLD , 14));
+        menuBar.setFont(smallFont);
 
         Menu menu = new Menu("Menu");
         MenuItem exitItem = new MenuItem("Exit");

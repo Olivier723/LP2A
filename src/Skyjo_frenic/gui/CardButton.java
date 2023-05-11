@@ -90,6 +90,7 @@ public class CardButton extends SFCButton{
 
             //Then get rid of the drawn card in the player "inventory
             this.associatedCard.getAssociatedPlayer().setDrawnCard(null);
+            parentGame.heldCardTexture.deleteBackgroundImage();
 
             associatedPlayer.addPoints(this.associatedCard.getValue());
             parentGame.updateGeneralInfoLabel();

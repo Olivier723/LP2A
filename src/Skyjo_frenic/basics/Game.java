@@ -1,9 +1,9 @@
 package Skyjo_frenic.basics;
 
 import Skyjo_frenic.gui.CardButton;
+import Skyjo_frenic.gui.SFCButton;
 import Skyjo_frenic.gui.SFCFrame;
 import Skyjo_frenic.gui.SFCTexture;
-import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.ArrayDeque;
@@ -229,6 +229,22 @@ public class Game extends SFCFrame {
         }
     }
 
+    private void endGame() {
+        int lowestScore = Integer.MAX_VALUE;
+        Player winner = null;
+        for(final var player : players){
+            if(player.getPoints() < lowestScore) {
+                lowestScore = player.getPoints();
+                winner = player;
+            }
+        }
+        if(winner == null)
+            throw new NullPointerException("No winner was found !");
+
+        super.announce("The winner is " + winner + " with " + winner.getPoints() + " points !");
+        super.dispose();
+    }
+
     /**
      * Determines if the current player has finished the game, meaning that he either has more than
      * {@link #MAX_POINTS_ALLOWED} points or has revealed all his cards
@@ -246,12 +262,16 @@ public class Game extends SFCFrame {
      */
     private void changeCurrentPlayer() {
         // We first check if the player is able to finish his turn
+        // Then if he is, we set the last turn to the current player's turn
+        // so that the game will end at the end of the turn
         if(this.hasCurrentPlayerFinished()){
             this.winningTurn = this.currentPlayer.getTurn();
         }
-        if(currentPlayer.canSwitchPlayer()) {
-            this.currentPlayer.addTurn();
 
+        if(currentPlayer.canSwitchPlayer()) {
+            // Before switching players, we need to increase the player's turn
+            // and reset the drawn card
+            this.currentPlayer.addTurn();
             this.currentPlayer.setDrawnCard(null);
 
 
@@ -264,6 +284,10 @@ public class Game extends SFCFrame {
                 super.discardButton.addActionListener(e -> discardPileHandler());
 
             }
+            if(this.getLastPlayer().getTurn() == winningTurn){
+                this.endGame();
+                return;
+            }
 
             //Otherwise, we just switch players normally
             else {
@@ -271,6 +295,8 @@ public class Game extends SFCFrame {
             }
 
             this.relinkCardButtons();
+
+            // Updating the UI
             this.updateTotalPointsLabel();
             this.updateInfoLabel();
             if(this.isStartFinished) {
@@ -295,7 +321,9 @@ public class Game extends SFCFrame {
             this.players.remove(players.size()-1);
             this.updatePlayerList();
             if(this.players.size() < 2) {
-                super.getLaunchButton().SFCHide();
+                SFCButton launchButton = super.getLaunchButton();
+                launchButton.removeActionListener(launchButton.getActionListeners()[0]);
+                launchButton.SFCHide();
             }
         }
     }
@@ -322,7 +350,7 @@ public class Game extends SFCFrame {
             super.nameInput.setText("");
             this.players.add(new Player(name, players.size()+1));
             this.updatePlayerList();
-            super.prompt.setText("Please enter the next name :");
+            super.nameInputPrompt.setText("Please enter the next name :");
 
             //Set the first player who joined as the player who will play first
             if(this.players.size() == 1) {
@@ -332,8 +360,7 @@ public class Game extends SFCFrame {
 
             if (this.players.size() == 2) {
                 super.getLaunchButton().addActionListener(e -> gameStartHandler());
-                super.infoPanelGBC.gridy = InputMenuPos.LAUNCH_BUTTON.y;
-                super.popupPanel.add(super.getLaunchButton(), infoPanelGBC);
+                super.getLaunchButton().SFCShow();
             }
             return;
         }
@@ -364,6 +391,7 @@ public class Game extends SFCFrame {
         this.discardPile.addCard(this.currentPlayer.getDrawnCard());
         super.discardButton.setBackgroundImage(this.currentPlayer.getDrawnCard().getFrontTexture());
         super.discardButton.repaint();
+        super.heldCardTexture.deleteBackgroundImage();
         this.currentPlayer.setDrawnCard(null);
         this.updateGeneralInfoLabel();
     }
@@ -427,6 +455,7 @@ public class Game extends SFCFrame {
         super.announce("You have drawn a " + drawnCard);
         drawnCard.setAssociatedPlayer(this.currentPlayer);
         this.currentPlayer.setDrawnCard(drawnCard);
+        super.heldCardTexture.setBackgroundImage(drawnCard.getFrontTexture());
         this.updateGeneralInfoLabel();
     }
 
@@ -441,7 +470,7 @@ public class Game extends SFCFrame {
         } else {
             message = "You have a " + this.currentPlayer.getDrawnCard() + " in hand";
         }
-        super.updateLabel(super.generalInfoLabel, message );
+        super.updateLabel(super.heldCardName, message);
     }
 
     /**

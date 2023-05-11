@@ -25,6 +25,10 @@ public class SFCPanel extends JPanel implements EasyBackgroundImage, SFCComponen
         this.img = SFCTexture.getImage();
     }
 
+    public void deleteBackgroundImage () {
+        this.img = null;
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

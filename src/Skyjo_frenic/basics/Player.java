@@ -72,6 +72,13 @@ public class Player {
         this.playerNumber = playerNumber;
     }
 
+    /**
+     * This function is used to determine if the current player can end is turn
+     * If it is the first turn of the game, we just need to know if the player has flipped 2 of his cards
+     * before switching.
+     * Otherwise, we need to know if the player has drawn a card and flipped one of his cards before switching.
+     * @return True if the player can switch, false otherwise
+     */
     public boolean canSwitchPlayer() {
         if(this.turn == 0) {
             return this.cardsFlippedThisTurn == 2;
@@ -104,12 +111,22 @@ public class Player {
         return true;
     }
 
+
+    /**
+     * Changes the oldCard with the newCard in the player's hand
+     * @param oldCard the card that is already in the player's hand
+     * @param newCard the card that will replace the oldCard
+     */
     public void swapCards(Card oldCard, Card newCard) {
         if(newCard == null || oldCard == null) {
             System.err.println("[ERROR] Swapping cards requires both cards to be non-null!");
             return;
         }
         int oldCardPos = this.currentHand.indexOf(oldCard);
+        if(oldCardPos == -1) {
+            System.err.println("[ERROR] Swapping cards requires the old card to be in the player's hand!");
+            return;
+        }
         this.currentHand.remove(oldCardPos);
         this.currentHand.add(oldCardPos,newCard);
     }

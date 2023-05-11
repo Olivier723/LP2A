@@ -30,6 +30,7 @@ public class Card{
     public SFCTexture getFrontTexture () {
         return frontTexture;
     }
+
     private final SFCTexture backTexture;
 
     public SFCTexture getCurrentTexture () {
