@@ -322,7 +322,10 @@ public class Game extends SFCFrame {
             this.updatePlayerList();
             if(this.players.size() < 2) {
                 SFCButton launchButton = super.getLaunchButton();
-                launchButton.removeActionListener(launchButton.getActionListeners()[0]);
+
+                //If the launch button has an action listener, we remove it to ensure that if it is to be shown again, it won't have multiple action listeners
+                if(launchButton.getActionListeners().length > 0)
+                    launchButton.removeActionListener(launchButton.getActionListeners()[0]);
                 launchButton.SFCHide();
             }
         }
