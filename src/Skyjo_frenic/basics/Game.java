@@ -81,6 +81,7 @@ public class Game extends SFCFrame {
         super.nameInput.addActionListener(e -> nameInputHandler());
         this.currentPlayer = null;
         this.updatePlayerList();
+        this.winningTurn = -1;
     }
 
     /**

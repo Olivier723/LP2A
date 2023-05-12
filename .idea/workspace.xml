@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="113fa787-f6bc-468d-9d39-a2f2a305c185" name="Changes" comment="Fixed some bugs">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Game.java" afterDir="false" />
     </list>
