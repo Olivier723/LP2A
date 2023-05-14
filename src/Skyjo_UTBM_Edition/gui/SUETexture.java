@@ -5,6 +5,8 @@ import java.awt.*;
 
 /**
  * This is a texture repertory to help with changing the textures of the game without having to change the code everytime.
+ * Loading the textures could also have been done dynamically during the creation of the game, the reason we've done it this way
+ * is that we began doing it statically and didn't bother to change it.
  */
 public enum SUETexture {
     CARD_BACK("resources/textures/Cards/card_back.png", "card_back"),

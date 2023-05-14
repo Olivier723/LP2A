@@ -5,24 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="113fa787-f6bc-468d-9d39-a2f2a305c185" name="Changes" comment="Fixed some bugs">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Card_distribution.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui_proto.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_UTBM_Edition/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/basics/CSVReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_UTBM_Edition/basics/CSVReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_UTBM_Edition/basics/Card.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_UTBM_Edition/basics/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/basics/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_UTBM_Edition/basics/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/CardButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_UTBM_Edition/gui/CardButton.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/EasyBackgroundImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_UTBM_Edition/gui/EasyBackgroundImage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_UTBM_Edition/gui/SUEButton.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_UTBM_Edition/gui/SUEComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_UTBM_Edition/gui/SUEFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_UTBM_Edition/gui/SUEPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Skyjo_frenic/gui/SFCTexture.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_UTBM_Edition/gui/SUETexture.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_UTBM_Edition/basics/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_UTBM_Edition/basics/Card.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Skyjo_UTBM_Edition/gui/SUETexture.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Skyjo_UTBM_Edition/gui/SUETexture.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

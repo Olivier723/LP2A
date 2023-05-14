@@ -52,10 +52,6 @@ public class Card{
         this.state = CardState.REVEALED;
     }
 
-    public void hide () {
-        this.state = CardState.HIDDEN;
-    }
-
     public boolean isRevealed() {
         return state == CardState.REVEALED;
     }
