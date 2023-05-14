@@ -1,4 +1,4 @@
-package Skyjo_frenic.basics;
+package Skyjo_UTBM_Edition.basics;
 
 import java.util.ArrayList;
 

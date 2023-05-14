@@ -1,8 +1,8 @@
-package Skyjo_frenic.gui;
+package Skyjo_UTBM_Edition.gui;
 
-import Skyjo_frenic.basics.Game;
-import Skyjo_frenic.basics.Card;
-import Skyjo_frenic.basics.Player;
+import Skyjo_UTBM_Edition.basics.Game;
+import Skyjo_UTBM_Edition.basics.Card;
+import Skyjo_UTBM_Edition.basics.Player;
 
 import java.awt.*;
 
@@ -11,7 +11,7 @@ import java.awt.*;
  * As such it does handle the click event and the necessary verifications.
  * Also handles how the card is rendered and resized
  */
-public class CardButton extends SFCButton{
+public class CardButton extends SUEButton {
     private Card associatedCard;
 
     /**
@@ -43,11 +43,11 @@ public class CardButton extends SFCButton{
      * @param cardPanel the panel representing the grid of cards
      * @param game the game instance that created this button
      */
-    public CardButton (SFCPanel cardPanel, Game game) {
-        super(SFCTexture.CARD_BACK);
+    public CardButton (SUEPanel cardPanel, Game game) {
+        super(SUETexture.CARD_BACK);
         this.associatedCard = null;
         this.parentGame = game;
-        Dimension screenSize = SFCFrame.getScreenSize();
+        Dimension screenSize = SUEFrame.getScreenSize();
         Dimension cardSize = new Dimension((int) (screenSize.width * CARD_TO_SCREEN_RATIO),
                                            (int) (screenSize.width * CARD_TO_SCREEN_RATIO * GOLDEN_RATIO));
         this.associatedCard = null;

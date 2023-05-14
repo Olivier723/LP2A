@@ -1,9 +1,9 @@
-package Skyjo_frenic.basics;
+package Skyjo_UTBM_Edition.basics;
 
-import Skyjo_frenic.gui.CardButton;
-import Skyjo_frenic.gui.SFCButton;
-import Skyjo_frenic.gui.SFCFrame;
-import Skyjo_frenic.gui.SFCTexture;
+import Skyjo_UTBM_Edition.gui.CardButton;
+import Skyjo_UTBM_Edition.gui.SUEButton;
+import Skyjo_UTBM_Edition.gui.SUEFrame;
+import Skyjo_UTBM_Edition.gui.SUETexture;
 
 import java.awt.*;
 import java.util.ArrayDeque;
@@ -16,7 +16,7 @@ import java.util.Iterator;
  * Extends the SFCFrame class to make it easier to change the UI dynamically while also benefiting from JFrame's dispose method
  * Also contains the list of players and the card piles
  */
-public class Game extends SFCFrame {
+public class Game extends SUEFrame {
     // Global constants
     public static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     public static final int MAX_CARDS_PER_HAND = 12;
@@ -70,10 +70,10 @@ public class Game extends SFCFrame {
     private Player currentPlayer;
 
     public Game() {
-        super("Skyjo_frenic", 1200, 800);
+        super("Skyjo_UTBM_Edition", 1200, 800);
         this.players = new ArrayList<>();
         this.drawPile = generateDeck();
-        super.setIconImage(SFCTexture.CARD_BACK.getImage());
+        super.setIconImage(SUETexture.CARD_BACK.getImage());
         this.discardPile = new SFCCardPile();
         this.playerCards = createPlayerCards();
         super.getOkButton().addActionListener(e -> nameInputHandler());
@@ -102,7 +102,7 @@ public class Game extends SFCFrame {
      *
      */
     public void begin() {
-        super.SFCShow();
+        super.SUEShow();
     }
 
     /**
@@ -148,10 +148,10 @@ public class Game extends SFCFrame {
             int cardAmount = Integer.parseInt(card.get(2));
             for(int i = 0; i < cardAmount; i++){
                 String textureName = card.get(0).split("\\.")[0];
-                SFCTexture texture =  SFCTexture.getTexture(textureName);
+                SUETexture texture =  SUETexture.getTexture(textureName);
 
                 int cardPoints = Integer.parseInt(card.get(1));
-                deck.addCard(new Card(cardPoints, SFCTexture.CARD_BACK, texture, textureName));
+                deck.addCard(new Card(cardPoints, SUETexture.CARD_BACK, texture, textureName));
             }
         }
         return deck;
@@ -161,7 +161,7 @@ public class Game extends SFCFrame {
      * Changes the UI to show what's necessary to play the game and hide the info panel
      */
     private void setPlayingUI() {
-        super.popupPanel.SFCHide();
+        super.popupPanel.SUEHide();
         super.actionsPanel.add(super.drawPanel, super.actionsPanelGBC);
         super.actionsPanelGBC.gridy = 1;
         super.actionsPanel.add(super.nextPlayerButton, super.actionsPanelGBC);
@@ -193,7 +193,7 @@ public class Game extends SFCFrame {
         //Now that the cards are distributed, we can associate the first player's cards to the buttons
         this.relinkCardButtons();
 
-        super.cardPanel.SFCShow();
+        super.cardPanel.SUEShow();
         this.updateInfoLabel();
     }
 
@@ -322,12 +322,12 @@ public class Game extends SFCFrame {
             this.players.remove(players.size()-1);
             this.updatePlayerList();
             if(this.players.size() < 2) {
-                SFCButton launchButton = super.getLaunchButton();
+                SUEButton launchButton = super.getLaunchButton();
 
                 //If the launch button has an action listener, we remove it to ensure that if it is to be shown again, it won't have multiple action listeners
                 if(launchButton.getActionListeners().length > 0)
                     launchButton.removeActionListener(launchButton.getActionListeners()[0]);
-                launchButton.SFCHide();
+                launchButton.SUEHide();
             }
         }
     }
@@ -364,7 +364,7 @@ public class Game extends SFCFrame {
 
             if (this.players.size() == 2) {
                 super.getLaunchButton().addActionListener(e -> gameStartHandler());
-                super.getLaunchButton().SFCShow();
+                super.getLaunchButton().SUEShow();
             }
             return;
         }

@@ -1,4 +1,4 @@
-package Skyjo_frenic.gui;
+package Skyjo_UTBM_Edition.gui;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,7 +6,7 @@ import java.awt.*;
 /**
  * This is a texture repertory to help with changing the textures of the game without having to change the code everytime.
  */
-public enum SFCTexture {
+public enum SUETexture {
     CARD_BACK("resources/textures/Cards/card_back.png", "card_back"),
     MAT_TEXTURE("resources/textures/mat_background.png", "mat_background"),
 
@@ -156,7 +156,7 @@ public enum SFCTexture {
     private final ImageIcon image;
     private final String name;
 
-    SFCTexture (String path, String name) {
+    SUETexture (String path, String name) {
         this.image = new ImageIcon(path);
         this.name = name;
     }
@@ -164,7 +164,7 @@ public enum SFCTexture {
     /**
      * Automatically create the name of the card and the path to the texture using only the name provided in the enumerations
      */
-    SFCTexture () {
+    SUETexture () {
         this.name = this.toString().replace("_", "+");
         String path = "resources/textures/Cards/" + name + ".png";
         this.image = new ImageIcon(path);
@@ -174,8 +174,8 @@ public enum SFCTexture {
         return image.getImage();
     }
 
-    public static SFCTexture getTexture (String name) {
-        for (SFCTexture texture : SFCTexture.values()) {
+    public static SUETexture getTexture (String name) {
+        for (SUETexture texture : SUETexture.values()) {
             if (texture.name.equals(name)) {
                 return texture;
             }

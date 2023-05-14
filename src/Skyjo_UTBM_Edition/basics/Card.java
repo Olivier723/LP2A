@@ -1,6 +1,6 @@
-package Skyjo_frenic.basics;
+package Skyjo_UTBM_Edition.basics;
 
-import Skyjo_frenic.gui.SFCTexture;
+import Skyjo_UTBM_Edition.gui.SUETexture;
 
 /**
  * Represents a card in the game with a value and two textures (one for the front and one for the back)
@@ -25,15 +25,15 @@ public class Card{
         return associatedPlayer;
     }
 
-    private final SFCTexture frontTexture;
+    private final SUETexture frontTexture;
 
-    public SFCTexture getFrontTexture () {
+    public SUETexture getFrontTexture () {
         return frontTexture;
     }
 
-    private final SFCTexture backTexture;
+    private final SUETexture backTexture;
 
-    public SFCTexture getCurrentTexture () {
+    public SUETexture getCurrentTexture () {
         return this.isRevealed() ? frontTexture : backTexture;
     }
 
@@ -64,7 +64,7 @@ public class Card{
         return this.associatedPlayer != null;
     }
 
-    public Card (int value, SFCTexture backTexture, SFCTexture frontTexture, String name){
+    public Card (int value, SUETexture backTexture, SUETexture frontTexture, String name){
         this.value = value;
         this.backTexture = backTexture;
         this.frontTexture = frontTexture;

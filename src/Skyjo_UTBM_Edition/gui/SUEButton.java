@@ -1,6 +1,6 @@
-package Skyjo_frenic.gui;
+package Skyjo_UTBM_Edition.gui;
 
-import Skyjo_frenic.basics.Game;
+import Skyjo_UTBM_Edition.basics.Game;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,31 +8,31 @@ import java.awt.*;
 /**
  *
  */
-public class SFCButton extends JButton implements EasyBackgroundImage, SFCComponent {
+public class SUEButton extends JButton implements EasyBackgroundImage, SUEComponent {
     private Image img;
 
-    public SFCButton (String text) {
+    public SUEButton (String text) {
         super(text);
         super.setAlignmentX(Component.CENTER_ALIGNMENT);
         super.setAlignmentY(Component.CENTER_ALIGNMENT);
         img = null;
     }
 
-    public SFCButton (SFCTexture sfcTexture) {
+    public SUEButton (SUETexture SUETexture) {
         super();
         super.setAlignmentX(Component.CENTER_ALIGNMENT);
         super.setAlignmentY(Component.CENTER_ALIGNMENT);
-        this.img = sfcTexture.getImage();
+        this.img = SUETexture.getImage();
     }
 
-    public SFCButton () {
+    public SUEButton () {
         super.setAlignmentX(Component.CENTER_ALIGNMENT);
         super.setAlignmentY(Component.CENTER_ALIGNMENT);
         super.setBackground(Game.TRANSPARENT);
     }
 
-    public void setBackgroundImage (SFCTexture sfcTexture) {
-        this.img = sfcTexture.getImage();
+    public void setBackgroundImage (SUETexture SUETexture) {
+        this.img = SUETexture.getImage();
     }
 
 
@@ -43,13 +43,13 @@ public class SFCButton extends JButton implements EasyBackgroundImage, SFCCompon
     }
 
     @Override
-    public void SFCShow () {
+    public void SUEShow () {
         this.setEnabled(true);
         this.setVisible(true);
     }
 
     @Override
-    public void SFCHide () {
+    public void SUEHide () {
         this.setEnabled(false);
         this.setVisible(false);
     }

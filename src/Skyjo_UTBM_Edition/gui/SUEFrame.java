@@ -1,6 +1,6 @@
-package Skyjo_frenic.gui;
+package Skyjo_UTBM_Edition.gui;
 
-import Skyjo_frenic.basics.Game;
+import Skyjo_UTBM_Edition.basics.Game;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,9 +13,9 @@ import java.net.URL;
 /**
  * Hides some of the ugly code of the GUI behind a simpler interface.
  */
-public class SFCFrame extends JFrame implements SFCComponent {
+public class SUEFrame extends JFrame implements SUEComponent {
     public final Dimension screenSize;
-    private final SFCTexture background;
+    private final SUETexture background;
     public enum InputMenuPos {
         TITLE,
         NAME_INPUT,
@@ -38,18 +38,18 @@ public class SFCFrame extends JFrame implements SFCComponent {
     /**
      * The panel containing the whole game
      */
-    protected SFCPanel mainPanel;
+    protected SUEPanel mainPanel;
 
     /**
      * Container of the {@link #popupPanel} to center it on the screen
      */
-    protected SFCPanel popupPanelContainer;
+    protected SUEPanel popupPanelContainer;
 
     /**
      * The panel that asks the player for their name
      * (Originally thought to be used like a popup instead of the {@link #announce} method , but could not be used due to time constraints)
      */
-    protected SFCPanel popupPanel;
+    protected SUEPanel popupPanel;
 
     /**
      * This label is what prompts the player to enter their name
@@ -64,19 +64,19 @@ public class SFCFrame extends JFrame implements SFCComponent {
     /**
      * The panel containing the ok and cancel buttons
      */
-    protected SFCPanel buttonPanel;
-    private SFCButton okButton;
-    public SFCButton getOkButton () {
+    protected SUEPanel buttonPanel;
+    private SUEButton okButton;
+    public SUEButton getOkButton () {
         return okButton;
     }
 
-    private SFCButton cancelButton;
-    public SFCButton getCancelButton () {
+    private SUEButton cancelButton;
+    public SUEButton getCancelButton () {
         return cancelButton;
     }
 
-    private SFCButton launchButton;
-    public SFCButton getLaunchButton () {
+    private SUEButton launchButton;
+    public SUEButton getLaunchButton () {
         return launchButton;
     }
 
@@ -90,7 +90,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
     /**
      * The label situated on the left that displays the current player's name and the card they're holding
      */
-    protected SFCPanel infoPanel;
+    protected SUEPanel infoPanel;
 
     /**
      * Shows the current player's points count
@@ -101,7 +101,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
      * Contains the info about the card that the player is holding
      * i.e. it's name and texture
      */
-    protected SFCPanel heldCardPanel;
+    protected SUEPanel heldCardPanel;
 
     /**
      * Shows the card that the current player is holding
@@ -111,7 +111,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
     /**
      * The texture associated with the card name in {@link #heldCardName}
      */
-    protected SFCPanel heldCardTexture;
+    protected SUEPanel heldCardTexture;
 
     /**
      * Shows the name of the current player
@@ -122,29 +122,29 @@ public class SFCFrame extends JFrame implements SFCComponent {
     /**
      * The panel in the center of the screen containing the {@link CardButton}s
      */
-    protected SFCPanel cardPanel;
+    protected SUEPanel cardPanel;
 
 
     /**
      * The panel on the right containing the draw, discard and actions panels
       */
-    protected SFCPanel actionsPanel;
+    protected SUEPanel actionsPanel;
 
-    protected SFCPanel drawPanel;
+    protected SUEPanel drawPanel;
 
-    protected SFCButton drawButton;
+    protected SUEButton drawButton;
 
     /**
      * The button that allows the player to end their turn
      */
-    protected SFCButton nextPlayerButton;
+    protected SUEButton nextPlayerButton;
 
     /**
      * The panel containing the discard button
      */
-    protected SFCPanel discardPanel;
+    protected SUEPanel discardPanel;
 
-    protected SFCButton discardButton;
+    protected SUEButton discardButton;
 
 
     // Constraints used to place the components in the panels
@@ -156,17 +156,17 @@ public class SFCFrame extends JFrame implements SFCComponent {
     }
 
     @Override
-    public void SFCHide () {
+    public void SUEHide () {
         this.setVisible(false);
     }
 
     @Override
-    public void SFCShow () {
+    public void SUEShow () {
         this.setVisible(true);
     }
 
-    protected SFCFrame (String title, int w, int h) {
-        this.screenSize = SFCFrame.getScreenSize();
+    protected SUEFrame (String title, int w, int h) {
+        this.screenSize = SUEFrame.getScreenSize();
         if(w > 0 && h > 0 && w < screenSize.width && h < screenSize.height) {
             this.setSize(w, h);
         } else {
@@ -190,7 +190,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
         int middleScreenX = (int) ((screenSize.getWidth() - w) / 2);
         int middleScreenY = (int) ((screenSize.getHeight() - h) / 2);
         this.setLocation(middleScreenX, middleScreenY);
-        this.background = SFCTexture.MAT_TEXTURE;
+        this.background = SUETexture.MAT_TEXTURE;
         this.createUIComponents();
     }
 
@@ -198,7 +198,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
      * Creates the UI components for the action panel
      */
     private void createActionPanel(){
-        actionsPanel = new SFCPanel();
+        actionsPanel = new SUEPanel();
         actionsPanel.setLayout(new GridBagLayout());
         actionsPanelGBC = new GridBagConstraints();
         mainPanel.add(actionsPanel, BorderLayout.EAST);
@@ -215,7 +215,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
         drawPanelGBC.insets = new Insets(0, 0, 20, 0);
         drawPanelGBC.anchor = GridBagConstraints.CENTER;
 
-        drawPanel = new SFCPanel();
+        drawPanel = new SUEPanel();
         drawPanel.setLayout(new GridBagLayout());
         drawPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
         drawPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -224,12 +224,12 @@ public class SFCFrame extends JFrame implements SFCComponent {
         drawLabel.setFont(defaultFont);
         drawPanel.add(drawLabel, drawPanelGBC);
         drawPanelGBC.gridy = 1;
-        drawButton = new SFCButton();
+        drawButton = new SUEButton();
         drawButton.setPreferredSize(drawButtonSize);
-        drawButton.setBackgroundImage(SFCTexture.CARD_BACK);
+        drawButton.setBackgroundImage(SUETexture.CARD_BACK);
         drawPanel.add(drawButton, drawPanelGBC);
 
-        discardPanel = new SFCPanel();
+        discardPanel = new SUEPanel();
         discardPanel.setLayout(new GridBagLayout());
         JLabel discardLabel = new JLabel("Discard pile :");
         discardLabel.setForeground(Color.BLACK);
@@ -238,13 +238,13 @@ public class SFCFrame extends JFrame implements SFCComponent {
         discardLabel.setFont(defaultFont);
         discardPanel.add(discardLabel, drawPanelGBC);
         drawPanelGBC.gridy = 1;
-        discardButton = new SFCButton();
+        discardButton = new SUEButton();
         discardButton.setPreferredSize(drawButtonSize);
         discardPanel.add(discardButton, drawPanelGBC);
     }
 
     private void createInfoPanel() {
-        infoPanel = new SFCPanel();
+        infoPanel = new SUEPanel();
         infoPanel.setMinimumSize(CardButton.minimumSize);
         infoPanel.setMaximumSize(CardButton.maximumSize);
         infoPanel.setLayout(new GridLayout(2, 1));
@@ -261,7 +261,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
         totalPointsLabel.setFont(defaultFont);
         infoPanel.add(totalPointsLabel);
 
-        heldCardPanel = new SFCPanel();
+        heldCardPanel = new SUEPanel();
         heldCardPanel.setLayout(new GridBagLayout());
         GridBagConstraints currentCardGBC = new GridBagConstraints();
         currentCardGBC.gridx = 0;
@@ -274,7 +274,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
         heldCardPanel.add(heldCardName, currentCardGBC);
 
         currentCardGBC.gridy = 1;
-        heldCardTexture = new SFCPanel();
+        heldCardTexture = new SUEPanel();
         heldCardTexture.setPreferredSize(drawButtonSize);
         heldCardPanel.add(heldCardTexture, currentCardGBC);
 
@@ -285,13 +285,13 @@ public class SFCFrame extends JFrame implements SFCComponent {
      * Creates all the components of the game then it is up to the subclasses to add them to the frame whenever they're needed
      */
     private void createUIComponents () {
-        mainPanel = new SFCPanel(background);
+        mainPanel = new SUEPanel(background);
         mainPanel.setLayout(new BorderLayout());
         this.add(mainPanel);
 
-        nextPlayerButton = new SFCButton("Next Player");
+        nextPlayerButton = new SUEButton("Next Player");
 
-        cardPanel = new SFCPanel();
+        cardPanel = new SUEPanel();
         cardPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         cardPanel.setMaximumSize(new Dimension(700,700 ));
         cardPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -311,12 +311,12 @@ public class SFCFrame extends JFrame implements SFCComponent {
     /**
      * Creates the player input menu
      */
-    private SFCPanel createPopupPanel () {
+    private SUEPanel createPopupPanel () {
 
-        popupPanelContainer = new SFCPanel();
+        popupPanelContainer = new SUEPanel();
         popupPanelContainer.setLayout(new GridBagLayout());
 
-        popupPanel = new SFCPanel();
+        popupPanel = new SUEPanel();
         popupPanel.setBackground(new Color(0x55FFFFFF, true));
         popupPanel.setPreferredSize(maxInfoPanelSize);
         infoPanelGBC = new GridBagConstraints();
@@ -337,7 +337,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
         infoPanelGBC.gridy = InputMenuPos.TITLE.y;
         popupPanel.add(titleLabel, infoPanelGBC);
 
-        SFCPanel inputPanel = new SFCPanel();
+        SUEPanel inputPanel = new SUEPanel();
         inputPanel.setLayout(new GridLayout(1, 2));
         inputPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         inputPanel.setPreferredSize(new Dimension(450, 25));
@@ -354,7 +354,7 @@ public class SFCFrame extends JFrame implements SFCComponent {
         nameInput.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         inputPanel.add(nameInput);
 
-        buttonPanel = new SFCPanel();
+        buttonPanel = new SUEPanel();
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         infoPanelGBC.gridy = InputMenuPos.BUTTON_MENU.y;
         popupPanel.add(buttonPanel, infoPanelGBC);
@@ -363,25 +363,25 @@ public class SFCFrame extends JFrame implements SFCComponent {
         buttonLayout.setHgap(10);
         buttonPanel.setLayout(buttonLayout);
 
-        okButton = new SFCButton("OK");
+        okButton = new SUEButton("OK");
         okButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         okButton.setPreferredSize(buttonSize);
         okButton.setAlignmentY(Component.CENTER_ALIGNMENT);
         buttonPanel.add(okButton);
 
-        cancelButton = new SFCButton("Cancel");
+        cancelButton = new SUEButton("Cancel");
         cancelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         cancelButton.setPreferredSize(buttonSize);
         cancelButton.setAlignmentY(Component.CENTER_ALIGNMENT);
         buttonPanel.add(cancelButton);
 
-        launchButton = new SFCButton("Start Game");
+        launchButton = new SUEButton("Start Game");
         launchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         launchButton.setMaximumSize(buttonSize);
         launchButton.setAlignmentY(Component.CENTER_ALIGNMENT);
         infoPanelGBC.gridy = InputMenuPos.LAUNCH_BUTTON.y;
         popupPanel.add(launchButton, infoPanelGBC);
-        launchButton.SFCHide();
+        launchButton.SUEHide();
 
         playerList = new JTextPane();
         playerList.setFont(smallFont);
